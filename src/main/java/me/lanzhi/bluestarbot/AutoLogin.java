@@ -1,50 +1,48 @@
 package me.lanzhi.bluestarbot;
 
-import me.lanzhi.api.config.YamlFile;
 import me.lanzhi.bluestarbot.api.BluestarBot;
 
-import java.io.File;
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public final class AutoLogin
+public final class AutoLogin implements Serializable
 {
-    private final BluestarBotPlugin plugin;
-    private final YamlFile config;
+    private static final long serialVersionUID=0L;
+    private final Map<Long,String> bots;
 
-    public AutoLogin(BluestarBotPlugin plugin)
+    public AutoLogin()
     {
-        this.plugin=plugin;
-        config=YamlFile.loadYamlFile(new File(plugin.getDataFolder(),"autologin_data.yml"));
+        bots=new HashMap<>();
     }
 
     public void addAutologin(long id,String password)
     {
-        config.set(""+id,password);
-        config.save();
+        bots.put(id,password);
     }
+
     public void removeAutoLogin(long id)
     {
-        addAutologin(id,null);
+        bots.remove(id);
     }
     public List<Long> getList()
     {
-        ArrayList<Long>id=new ArrayList<>();
-        config.getKeys(false).forEach(s -> id.add(Long.parseLong(s)));
-        return id;
+        return new ArrayList<>(bots.keySet());
     }
     public void loginAll()
     {
-        for (Map.Entry<String,Object> entry:config.getValues(false).entrySet())
+        for (Map.Entry<Long,String> entry: bots.entrySet())
         {
             try
             {
-                long id=Long.parseLong(entry.getKey());
-                String password=(String) entry.getValue();
-                BluestarBot.createBot(id,password);
+                BluestarBot.createBot(entry.getKey(),entry.getValue());
             }
-            catch (Exception e){}
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
         }
     }
 }

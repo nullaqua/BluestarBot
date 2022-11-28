@@ -1,5 +1,7 @@
 package me.lanzhi.bluestarbot;
 
+import me.lanzhi.api.reflect.FieldAccessor;
+import me.lanzhi.bluestarbot.api.BluestarBot;
 import me.lanzhi.bluestarbot.api.event.BluestarBotEvent;
 import me.lanzhi.bluestarbot.classloader.MiraiLoader;
 import me.lanzhi.bluestarbot.command.BluestarBotCommand;
@@ -7,6 +9,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.nio.file.Files;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -15,10 +21,11 @@ public final class BluestarBotPlugin extends JavaPlugin
 {
     private final Set<Consumer<BluestarBotEvent>> listeners=new HashSet<>();
     private AutoLogin autoLogin;
+    private Bind bind;
+
     @Override
     public void onLoad()
     {
-        getDataFolder().mkdirs();
         try
         {
             MiraiLoader.loadMiraiCore();
@@ -29,12 +36,41 @@ public final class BluestarBotPlugin extends JavaPlugin
         {
             throw new RuntimeException(e);
         }
+
+        getDataFolder().mkdirs();
+        try
+        {
+            FieldAccessor.getDeclaredField(BluestarBot.class,"plugin").set(null,this);
+        }
+        catch (Throwable e)
+        {
+            throw new RuntimeException(e);
+        }
+
+        File data=new File(getDataFolder(),"bind.db");
+        try
+        {
+            bind=(Bind) new ObjectInputStream(Files.newInputStream(data.toPath())).readObject();
+        }
+        catch (Exception e)
+        {
+            bind=new Bind();
+        }
+
+        data=new File(getDataFolder(),"autologin.db");
+        try
+        {
+            autoLogin=(AutoLogin) new ObjectInputStream(Files.newInputStream(data.toPath())).readObject();
+        }
+        catch (Exception e)
+        {
+            autoLogin=new AutoLogin();
+        }
     }
 
     @Override
     public void onEnable()
     {
-        autoLogin=new AutoLogin(this);
         autoLogin.loginAll();
         getCommand("bluestarbot").setExecutor(new BluestarBotCommand(this));
         Manager.registerEvents();
@@ -45,6 +81,22 @@ public final class BluestarBotPlugin extends JavaPlugin
     public void onDisable()
     {
         Manager.unregisterEvents();
+
+        try
+        {
+            File data=new File(getDataFolder(),"bind.db");
+            data.delete();
+            data.createNewFile();
+            new ObjectOutputStream(Files.newOutputStream(data.toPath())).writeObject(bind);
+            data=new File(getDataFolder(),"autologin.db");
+            data.delete();
+            data.createNewFile();
+            new ObjectOutputStream(Files.newOutputStream(data.toPath())).writeObject(autoLogin);
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException(e);
+        }
     }
 
     public Set<Consumer<BluestarBotEvent>> getListeners()
@@ -74,7 +126,9 @@ public final class BluestarBotPlugin extends JavaPlugin
                         consumer.accept((T) event);
                     }
                 }
-                catch (Exception e){}
+                catch (Exception e)
+                {
+                }
             }
         });
     }
@@ -82,5 +136,10 @@ public final class BluestarBotPlugin extends JavaPlugin
     public AutoLogin getAutoLogin()
     {
         return autoLogin;
+    }
+
+    public Bind getBind()
+    {
+        return bind;
     }
 }

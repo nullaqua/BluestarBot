@@ -22,62 +22,6 @@ public class MiraiLoader
         load("net.mamoe","mirai-core-all","2.11.1");
     }
 
-    /*
-    public static String getStableVersion()
-    {
-        try
-        {
-            return Info.init().mirai.get("stable");
-        }
-        catch (IOException e)
-        {
-            Bukkit.getLogger().warning("Fetching mirai stable version from remote failed, try to use latest. Reason: "+e);
-            return "latest";
-        }
-    }
-
-    public static String getStableVersion(String PluginVersion)
-    {
-        try
-        {
-            String mirai=Info.init().mirai.get("stable"); // 最终获取到的 mirai 版本，先用stable占位
-
-            try
-            {
-                int ver=Version.init().versions.getOrDefault(PluginVersion,0); // 插件当前版本号
-                int temp=-1; // 用于取最大值
-
-                for (String s: Info.init().mirai.keySet())
-                {
-                    if (s.equalsIgnoreCase("stable"))
-                    {
-                        continue;
-                    }
-
-                    if (ver<=Integer.parseInt(s))
-                    {
-                        if (Integer.parseInt(s)>temp)
-                        {
-                            mirai=Info.init().mirai.get(s);
-                            temp=Integer.parseInt(s);
-                        }
-                    }
-                }
-            }
-            catch (Exception ignored)
-            {
-            }
-
-            return mirai;
-        }
-        catch (IOException e)
-        {
-            Bukkit.getLogger().warning("Fetching mirai stable version from remote failed, try to use latest. Reason: "+e);
-            return "latest";
-        }
-    }*/
-
-
     public static void load(String group,String id) throws IOException, ParserConfigurationException, SAXException
     {
         load(group,id,"latest");
@@ -90,7 +34,6 @@ public class MiraiLoader
             version=getLibraryVersionMaven(group,id,"https://maven.aliyun.com/nexus/content/groups/public/","release");
         }
 
-        // 文件夹
         File pluginDir=JavaPlugin.getPlugin(BluestarBotPlugin.class).getDataFolder();
         File LibrariesDir=new File(pluginDir,"libs");
         if (!LibrariesDir.exists()&&!LibrariesDir.mkdirs())
@@ -127,7 +70,7 @@ public class MiraiLoader
                 String content=new String(Files.readAllBytes(writeName.toPath()),StandardCharsets.UTF_8);
                 if (!content.equals(""))
                 {
-                    String name=id+"-"+content+".jar"; // 文件名
+                    String name=id+"-"+content+".jar";
                     File coreFile=new File(LibrariesDir,name);
                     loadLibraryClassLocal(coreFile);
                 }

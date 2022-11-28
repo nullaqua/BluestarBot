@@ -15,9 +15,11 @@ import org.jetbrains.annotations.Nullable;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public final class BluestarBot
 {
+    private static final BluestarBotPlugin plugin=null;
     private BluestarBot()
     {
     }
@@ -81,5 +83,30 @@ public final class BluestarBot
         bot.login();
         Bukkit.getLogger().warning("[BluestarBot]登录成功!");
         return bot;
+    }
+
+    public void addBind(UUID uuid,long id)
+    {
+        plugin.getBind().addBind(uuid,id);
+    }
+
+    public UUID getBind(long id)
+    {
+        return plugin.getBind().getBind(id);
+    }
+
+    public Long getBind(UUID uuid)
+    {
+        return plugin.getBind().getBind(uuid);
+    }
+
+    public Long removeBind(UUID uuid)
+    {
+        return plugin.getBind().removeBind(uuid);
+    }
+
+    public UUID removeBind(long id)
+    {
+        return plugin.getBind().removeBind(id);
     }
 }

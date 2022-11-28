@@ -3,11 +3,14 @@ package me.lanzhi.bluestarbot.command;
 import me.lanzhi.bluestarbot.BluestarBotPlugin;
 import me.lanzhi.bluestarbot.Manager;
 import me.lanzhi.bluestarbot.api.*;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,7 +18,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class BluestarBotCommand implements CommandExecutor, TabExecutor
+public final class BluestarBotCommand implements CommandExecutor, TabExecutor
 {
     private final BluestarBotPlugin plugin;
 
@@ -46,8 +49,27 @@ public class BluestarBotCommand implements CommandExecutor, TabExecutor
         {
             return;
         }
-        switch (args[0])
+        switch (args[0].toLowerCase())
         {
+            case "bind":
+            {
+                if (!(sender instanceof Player))
+                {
+                    sender.sendMessage(ChatColor.RED+"此指令仅允许玩家使用");
+                    return;
+                }
+                plugin.getBind().getGui().open((Player) sender);
+                return;
+            }
+            case "addbind":
+            {
+                OfflinePlayer player=Bukkit.getOfflinePlayer(args[1]);
+                long id=Long.parseLong(args[2]);
+                sender.sendMessage(ChatColor.AQUA+"添加绑定:"+player.getUniqueId()+" "+id);
+                plugin.getBind().addBind(player.getUniqueId(),id);
+                sender.sendMessage(ChatColor.GREEN+"绑定成功!");
+                return;
+            }
             case "login":
             {
                 if (args.length<3)
@@ -205,16 +227,23 @@ public class BluestarBotCommand implements CommandExecutor, TabExecutor
                                      "autologin",
                                      "sendfriend",
                                      "sendgroup",
-                                     "sendmember");
+                                     "sendmember",
+                                     "bind",
+                                     "addbind");
             }
             case 2:
             {
                 switch (args[0].toLowerCase())
                 {
+                    case "addbind":
+                        return null;
                     case "login":
-                    case "logout":
                     case "verify":
                     case "cancel":
+                    {
+                        return Collections.singletonList("qqid");
+                    }
+                    case "logout":
                     case "sendfriend":
                     case "sendgroup":
                     case "sendmember":
@@ -233,6 +262,18 @@ public class BluestarBotCommand implements CommandExecutor, TabExecutor
             }
             case 3:
             {
+                if ("autologin".equalsIgnoreCase(args[0]))
+                {
+                    if ("add".equalsIgnoreCase(args[1])||"remove".equalsIgnoreCase(args[1]))
+                    {
+                        return Collections.singletonList("qqid");
+                    }
+                    return Collections.emptyList();
+                }
+                if ("addbind".equalsIgnoreCase(args[0]))
+                {
+                    return Collections.singletonList("qqid");
+                }
                 List<String> a=new ArrayList<>();
                 Bot bot;
                 try
@@ -260,14 +301,6 @@ public class BluestarBotCommand implements CommandExecutor, TabExecutor
                         ArrayList<String> arrayList=new ArrayList<>();
                         bot.getGroups().forEach(group->arrayList.add(group.getId()+""));
                         return arrayList;
-                    }
-                    case "autologin":
-                    {
-                        if ("add".equalsIgnoreCase(args[1])||"remove".equalsIgnoreCase(args[1]))
-                        {
-                            return Collections.singletonList("qqid");
-                        }
-                        return Collections.emptyList();
                     }
                     default:
                         return Collections.emptyList();

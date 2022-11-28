@@ -36,25 +36,13 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Collection;
 
-/**
- * Provides access to {@link URLClassLoader}#addURL.
- */
 public abstract class URLClassLoaderAccess
 {
-
     private final URLClassLoader classLoader;
-
     protected URLClassLoaderAccess(URLClassLoader classLoader)
     {
         this.classLoader=classLoader;
     }
-
-    /**
-     * Creates a {@link URLClassLoaderAccess} for the given class loader.
-     *
-     * @param classLoader the class loader
-     * @return the access object
-     */
     static URLClassLoaderAccess create(final URLClassLoader classLoader)
     {
         return new URLClassLoaderAccess(classLoader)
@@ -73,31 +61,11 @@ public abstract class URLClassLoaderAccess
                 }
             }
         };
-        /*
-        if (Reflection.isSupported())
-        {
-            return new Reflection(classLoader);
-        }
-        else if (Unsafe.isSupported())
-        {
-            return new Unsafe(classLoader);
-        }
-        else
-        {
-            return Noop.INSTANCE;
-        }*/
+
     }
 
-    /**
-     * Adds the given URL to the class loader.
-     *
-     * @param url the URL to add
-     */
     public abstract void addURL(URL url);
 
-    /**
-     * Accesses using reflection, not supported on Java 9+.
-     */
     private static class Reflection extends URLClassLoaderAccess
     {
         private static final Method ADD_URL_METHOD;
@@ -140,12 +108,6 @@ public abstract class URLClassLoaderAccess
             }
         }
     }
-
-    /**
-     * Accesses using sun.misc.Unsafe, supported on Java 9+.
-     *
-     * @author Vaishnav Anil (https://github.com/slimjar/slimjar)
-     */
     private static class Unsafe extends URLClassLoaderAccess
     {
         private static final sun.misc.Unsafe UNSAFE;
