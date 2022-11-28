@@ -1,0 +1,38 @@
+package me.lanzhi.bluestarbot.api.event.message.received;
+
+import me.lanzhi.bluestarbot.Mapping;
+import me.lanzhi.bluestarbot.api.Stranger;
+import me.lanzhi.bluestarbot.api.event.MessageReceivedEvent;
+import me.lanzhi.bluestarbot.api.event.StrangerEvent;
+
+public final class StrangerMessageEvent extends UserMessageEvent implements StrangerEvent, MessageReceivedEvent
+{
+    @Override
+    public net.mamoe.mirai.event.events.StrangerMessageEvent getEvent()
+    {
+        return (net.mamoe.mirai.event.events.StrangerMessageEvent) super.getEvent();
+    }
+
+    public StrangerMessageEvent(net.mamoe.mirai.event.events.StrangerMessageEvent event)
+    {
+        super(event);
+    }
+
+    @Override
+    public Stranger getContact()
+    {
+        return Mapping.map(getEvent().getSubject());
+    }
+
+    @Override
+    public Stranger getSender()
+    {
+        return Mapping.map(getEvent().getSender());
+    }
+
+    @Override
+    public Stranger getUser()
+    {
+        return getStranger();
+    }
+}

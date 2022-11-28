@@ -1,0 +1,6 @@
+name: BluestarBot
+version: '${project.version}'
+main: me.lanzhi.bluestarbot.BluestarBotPlugin
+api-version: 1.13
+commands:
+  bluestarbot:
