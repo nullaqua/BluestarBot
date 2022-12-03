@@ -8,10 +8,14 @@ import me.lanzhi.bluestarbot.api.OtherClient;
 import me.lanzhi.bluestarbot.api.Stranger;
 import me.lanzhi.bluestarbot.api.User;
 import me.lanzhi.bluestarbot.api.*;
+import me.lanzhi.bluestarbot.api.event.message.received.GroupMessageEvent;
 import net.mamoe.mirai.contact.*;
+import net.mamoe.mirai.message.data.At;
+import net.mamoe.mirai.message.data.SingleMessage;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 public final class Mapping
 {
@@ -89,15 +93,9 @@ public final class Mapping
             return new User((UserOrBot) contact)
             {
                 @Override
-                public Type getUserType()
+                public Contact.Type getType()
                 {
-                    return null;
-                }
-
-                @Override
-                public Contact.Type getChatType()
-                {
-                    return null;
+                    return Type.Unknown;
                 }
             };
         }
@@ -106,13 +104,19 @@ public final class Mapping
             return new Contact((ContactOrBot) contact)
             {
                 @Override
-                public String getName()
+                public boolean nudge(long id)
                 {
-                    return "null";
+                    return false;
                 }
 
                 @Override
-                public Type getChatType()
+                public String getName()
+                {
+                    return "Unknown";
+                }
+
+                @Override
+                public Type getType()
                 {
                     return null;
                 }
@@ -199,6 +203,24 @@ public final class Mapping
             return (net.mamoe.mirai.contact.User) userOrBot;
         }
         return null;
+    }
+
+    public static String toString(GroupMessageEvent event)
+    {
+        StringBuilder builder=new StringBuilder();
+        Consumer<SingleMessage> consumer=singleMessage->
+        {
+            if (singleMessage instanceof At)
+            {
+                builder.append("@").append(event.getContact().getMember(((At) singleMessage).getTarget()).getName());
+            }
+            else
+            {
+                builder.append(singleMessage.contentToString());
+            }
+        };
+        event.getEvent().getMessage().forEach(consumer);
+        return builder.toString();
     }
 
     public static MemberPermission map(net.mamoe.mirai.contact.MemberPermission permission)

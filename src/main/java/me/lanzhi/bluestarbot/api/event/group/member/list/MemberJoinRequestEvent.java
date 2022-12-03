@@ -14,15 +14,15 @@ public final class MemberJoinRequestEvent extends BluestarBotEvent implements Gr
     }
 
     @Override
-    public net.mamoe.mirai.event.events.MemberJoinRequestEvent getEvent()
-    {
-        return (net.mamoe.mirai.event.events.MemberJoinRequestEvent) super.getEvent();
-    }
-
-    @Override
     public Group getGroup()
     {
         return Mapping.map(getEvent().getGroup());
+    }
+
+    @Override
+    public net.mamoe.mirai.event.events.MemberJoinRequestEvent getEvent()
+    {
+        return (net.mamoe.mirai.event.events.MemberJoinRequestEvent) super.getEvent();
     }
 
     public long getUserId()

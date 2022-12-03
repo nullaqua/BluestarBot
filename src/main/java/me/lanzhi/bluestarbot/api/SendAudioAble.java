@@ -10,13 +10,13 @@ public interface SendAudioAble
 {
     public default void sendAudio(File audio)
     {
-        this.sendAudio(ExternalResource.create(audio).toAutoCloseable());
+        this.sendAudio0(ExternalResource.create(audio).toAutoCloseable());
     }
+
+    void sendAudio0(ExternalResource resource);
 
     public default void sendAudio(InputStream stream) throws IOException
     {
-        this.sendAudio(ExternalResource.create(stream).toAutoCloseable());
+        this.sendAudio0(ExternalResource.create(stream).toAutoCloseable());
     }
-
-    public void sendAudio(ExternalResource resource);
 }

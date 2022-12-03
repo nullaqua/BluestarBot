@@ -13,14 +13,14 @@ public final class FriendDeleteEvent extends BluestarBotEvent implements FriendE
     }
 
     @Override
-    public net.mamoe.mirai.event.events.FriendDeleteEvent getEvent()
-    {
-        return (net.mamoe.mirai.event.events.FriendDeleteEvent) super.getEvent();
-    }
-
-    @Override
     public Friend getUser()
     {
         return Mapping.map(getEvent().getFriend());
+    }
+
+    @Override
+    public net.mamoe.mirai.event.events.FriendDeleteEvent getEvent()
+    {
+        return (net.mamoe.mirai.event.events.FriendDeleteEvent) super.getEvent();
     }
 }

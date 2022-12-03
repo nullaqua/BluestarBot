@@ -14,9 +14,9 @@ public final class GroupMessagePreSendEvent extends BluestarBotEvent implements 
     }
 
     @Override
-    public net.mamoe.mirai.event.events.GroupMessagePreSendEvent getEvent()
+    public Group getGroup()
     {
-        return (net.mamoe.mirai.event.events.GroupMessagePreSendEvent) super.getEvent();
+        return getContact();
     }
 
     @Override
@@ -26,8 +26,8 @@ public final class GroupMessagePreSendEvent extends BluestarBotEvent implements 
     }
 
     @Override
-    public Group getGroup()
+    public net.mamoe.mirai.event.events.GroupMessagePreSendEvent getEvent()
     {
-        return getContact();
+        return (net.mamoe.mirai.event.events.GroupMessagePreSendEvent) super.getEvent();
     }
 }

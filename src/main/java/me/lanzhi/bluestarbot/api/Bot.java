@@ -102,15 +102,9 @@ public final class Bot extends User
     }
 
     @Override
-    public Type getUserType()
+    public Type getType()
     {
-        return asFriend.getUserType();
-    }
-
-    @Override
-    public Contact.Type getChatType()
-    {
-        return asFriend.getChatType();
+        return Type.Bot;
     }
 
     @Override

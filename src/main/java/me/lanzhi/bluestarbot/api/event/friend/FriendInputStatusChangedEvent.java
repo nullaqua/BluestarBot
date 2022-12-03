@@ -13,15 +13,15 @@ public final class FriendInputStatusChangedEvent extends BluestarBotEvent implem
     }
 
     @Override
-    public net.mamoe.mirai.event.events.FriendInputStatusChangedEvent getEvent()
-    {
-        return (net.mamoe.mirai.event.events.FriendInputStatusChangedEvent) super.getEvent();
-    }
-
-    @Override
     public Friend getUser()
     {
         return Mapping.map(getEvent().getFriend());
+    }
+
+    @Override
+    public net.mamoe.mirai.event.events.FriendInputStatusChangedEvent getEvent()
+    {
+        return (net.mamoe.mirai.event.events.FriendInputStatusChangedEvent) super.getEvent();
     }
 
     public boolean isInputting()

@@ -13,15 +13,15 @@ public final class FriendNickChangedEvent extends BluestarBotEvent implements Fr
     }
 
     @Override
-    public net.mamoe.mirai.event.events.FriendNickChangedEvent getEvent()
-    {
-        return (net.mamoe.mirai.event.events.FriendNickChangedEvent) super.getEvent();
-    }
-
-    @Override
     public Friend getUser()
     {
         return Mapping.map(getEvent().getFriend());
+    }
+
+    @Override
+    public net.mamoe.mirai.event.events.FriendNickChangedEvent getEvent()
+    {
+        return (net.mamoe.mirai.event.events.FriendNickChangedEvent) super.getEvent();
     }
 
     public String getOld()

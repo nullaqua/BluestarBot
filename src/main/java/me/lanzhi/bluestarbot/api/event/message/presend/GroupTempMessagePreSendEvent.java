@@ -14,6 +14,12 @@ public final class GroupTempMessagePreSendEvent extends UserMessagePreSendEvent 
     }
 
     @Override
+    public Group getGroup()
+    {
+        return getContact().getGroup();
+    }
+
+    @Override
     public net.mamoe.mirai.event.events.GroupTempMessagePreSendEvent getEvent()
     {
         return (net.mamoe.mirai.event.events.GroupTempMessagePreSendEvent) super.getEvent();
@@ -25,11 +31,6 @@ public final class GroupTempMessagePreSendEvent extends UserMessagePreSendEvent 
         return Mapping.map(getEvent().getTarget());
     }
 
-    @Override
-    public Group getGroup()
-    {
-        return getContact().getGroup();
-    }
 
     @Override
     public NormalGroupMember getUser()

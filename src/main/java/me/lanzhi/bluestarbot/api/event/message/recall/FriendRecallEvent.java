@@ -6,7 +6,7 @@ import me.lanzhi.bluestarbot.api.event.BluestarBotEvent;
 import me.lanzhi.bluestarbot.api.event.FriendEvent;
 import me.lanzhi.bluestarbot.api.event.MessageRecallEvent;
 
-public final class FriendRecallEvent extends BluestarBotEvent implements MessageRecallEvent,FriendEvent
+public final class FriendRecallEvent extends BluestarBotEvent implements MessageRecallEvent, FriendEvent
 {
     public FriendRecallEvent(net.mamoe.mirai.event.events.MessageRecallEvent.FriendRecall event)
     {
@@ -14,9 +14,9 @@ public final class FriendRecallEvent extends BluestarBotEvent implements Message
     }
 
     @Override
-    public net.mamoe.mirai.event.events.MessageRecallEvent.FriendRecall getEvent()
+    public Friend getUser()
     {
-        return (net.mamoe.mirai.event.events.MessageRecallEvent.FriendRecall) super.getEvent();
+        return getSender();
     }
 
     @Override
@@ -26,8 +26,8 @@ public final class FriendRecallEvent extends BluestarBotEvent implements Message
     }
 
     @Override
-    public Friend getUser()
+    public net.mamoe.mirai.event.events.MessageRecallEvent.FriendRecall getEvent()
     {
-        return getSender();
+        return (net.mamoe.mirai.event.events.MessageRecallEvent.FriendRecall) super.getEvent();
     }
 }

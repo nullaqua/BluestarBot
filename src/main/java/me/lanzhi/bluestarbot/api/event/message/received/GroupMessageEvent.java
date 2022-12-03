@@ -23,7 +23,7 @@ public final class GroupMessageEvent extends BluestarBotEvent implements Message
     @Override
     public Group getContact()
     {
-        return getGroup();
+        return Mapping.map(getEvent().getGroup());
     }
 
     @Override

@@ -13,14 +13,14 @@ public final class FriendAvatarChangedEvent extends BluestarBotEvent implements 
     }
 
     @Override
-    public net.mamoe.mirai.event.events.FriendAvatarChangedEvent getEvent()
-    {
-        return (net.mamoe.mirai.event.events.FriendAvatarChangedEvent) super.getEvent();
-    }
-
-    @Override
     public Friend getUser()
     {
         return Mapping.map(getEvent().getFriend());
+    }
+
+    @Override
+    public net.mamoe.mirai.event.events.FriendAvatarChangedEvent getEvent()
+    {
+        return (net.mamoe.mirai.event.events.FriendAvatarChangedEvent) super.getEvent();
     }
 }

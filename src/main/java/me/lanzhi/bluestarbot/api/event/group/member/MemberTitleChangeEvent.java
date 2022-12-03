@@ -13,14 +13,14 @@ public final class MemberTitleChangeEvent extends BluestarBotEvent implements Gr
         super(event);
     }
 
-    public MemberSpecialTitleChangeEvent getEvent()
-    {
-        return (MemberSpecialTitleChangeEvent) super.getEvent();
-    }
-
     public NormalGroupMember getOperator()
     {
         return Mapping.map(getEvent().getOperator());
+    }
+
+    public MemberSpecialTitleChangeEvent getEvent()
+    {
+        return (MemberSpecialTitleChangeEvent) super.getEvent();
     }
 
     public String getNew()

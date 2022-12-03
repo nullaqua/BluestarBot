@@ -18,20 +18,14 @@ public final class Stranger extends User
         return getStranger().getNick();
     }
 
-    @Override
-    public User.Type getUserType()
-    {
-        return User.Type.STRANGER;
-    }
-
     public void delete()
     {
         getStranger().delete();
     }
 
     @Override
-    public Contact.Type getChatType()
+    public Contact.Type getType()
     {
-        return Contact.Type.STRANGER;
+        return Contact.Type.Stranger;
     }
 }

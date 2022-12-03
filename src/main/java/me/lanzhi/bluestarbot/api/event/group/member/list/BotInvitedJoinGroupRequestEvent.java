@@ -11,15 +11,15 @@ public final class BotInvitedJoinGroupRequestEvent extends BluestarBotEvent
         super(event);
     }
 
+    public void accept()
+    {
+        getEvent().accept();
+    }
+
     @Override
     public net.mamoe.mirai.event.events.BotInvitedJoinGroupRequestEvent getEvent()
     {
         return (net.mamoe.mirai.event.events.BotInvitedJoinGroupRequestEvent) super.getEvent();
-    }
-
-    public void accept()
-    {
-        getEvent().accept();
     }
 
     public void ignore()

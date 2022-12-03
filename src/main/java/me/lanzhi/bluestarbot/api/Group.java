@@ -25,15 +25,27 @@ public final class Group extends Contact implements SendAudioAble
         return getGroup().getName();
     }
 
+    @Override
+    public boolean nudge(long id)
+    {
+        NormalMember member=getGroup().get(id);
+        if (member==null)
+        {
+            return false;
+        }
+        member.nudge().sendTo(getGroup());
+        return true;
+    }
+
     public void setName(String name)
     {
         getGroup().setName(name);
     }
 
     @Override
-    public Type getChatType()
+    public Type getType()
     {
-        return Type.GROUP;
+        return Type.Group;
     }
 
     public NormalGroupMember getMember(long id)
@@ -96,7 +108,7 @@ public final class Group extends Contact implements SendAudioAble
     }
 
     @Override
-    public void sendAudio(ExternalResource resource)
+    public void sendAudio0(ExternalResource resource)
     {
         this.getGroup().sendMessage(this.getGroup().uploadAudio(resource.toAutoCloseable()));
     }

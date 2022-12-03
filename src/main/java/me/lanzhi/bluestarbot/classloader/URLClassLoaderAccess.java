@@ -39,15 +39,20 @@ import java.util.Collection;
 public abstract class URLClassLoaderAccess
 {
     private final URLClassLoader classLoader;
+
     protected URLClassLoaderAccess(URLClassLoader classLoader)
     {
         this.classLoader=classLoader;
     }
+
     static URLClassLoaderAccess create(final URLClassLoader classLoader)
     {
         return new URLClassLoaderAccess(classLoader)
         {
-            private final MethodAccessor methodAccessor=MethodAccessor.getDeclaredMethod(URLClassLoader.class,"addURL",URL.class);
+            private final MethodAccessor methodAccessor=MethodAccessor.getDeclaredMethod(URLClassLoader.class,
+                                                                                         "addURL",
+                                                                                         URL.class);
+
             @Override
             public void addURL(URL url)
             {
@@ -108,6 +113,7 @@ public abstract class URLClassLoaderAccess
             }
         }
     }
+
     private static class Unsafe extends URLClassLoaderAccess
     {
         private static final sun.misc.Unsafe UNSAFE;
@@ -153,16 +159,16 @@ public abstract class URLClassLoaderAccess
             this.pathURLs=pathURLs;
         }
 
-        private static boolean isSupported()
-        {
-            return UNSAFE!=null;
-        }
-
         private static Object fetchField(final Class<?> clazz,final Object object,final String name) throws NoSuchFieldException
         {
             Field field=clazz.getDeclaredField(name);
             long offset=UNSAFE.objectFieldOffset(field);
             return UNSAFE.getObject(object,offset);
+        }
+
+        private static boolean isSupported()
+        {
+            return UNSAFE!=null;
         }
 
         @Override

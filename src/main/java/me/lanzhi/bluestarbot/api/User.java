@@ -1,8 +1,9 @@
 package me.lanzhi.bluestarbot.api;
 
 import me.lanzhi.bluestarbot.Mapping;
-import net.mamoe.mirai.Bot;
 import net.mamoe.mirai.contact.UserOrBot;
+
+import java.util.Objects;
 
 public abstract class User extends Contact
 {
@@ -10,39 +11,31 @@ public abstract class User extends Contact
     {
         super(contact);
     }
-    
+
     public UserOrBot getUser()
     {
         return (UserOrBot) super.getContact();
     }
-
-    public abstract Type getUserType();
 
     public final String getRemark()
     {
         return Mapping.toUser(getUser()).getRemark();
     }
 
-    public final void nudge()
+    @Override
+    public boolean nudge(long id)
     {
-        if (getUser() instanceof net.mamoe.mirai.contact.User)
+        if (id!=getUser().getId())
         {
-            getUser().nudge().sendTo((net.mamoe.mirai.contact.User) getUser());
+            return false;
         }
-        else if (getUser() instanceof Bot)
-        {
-            getUser().nudge().sendTo(((Bot) getUser()).getAsFriend());
-        }
+        getUser().nudge().sendTo(Objects.requireNonNull(Mapping.toContact(getUser())));
+        return true;
     }
 
     @Override
     public String getName()
     {
         return null;
-    }
-
-    public enum Type
-    {
-        FRIEND,STRANGER,MEMBER
     }
 }

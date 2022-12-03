@@ -5,7 +5,7 @@ import me.lanzhi.bluestarbot.api.Bot;
 import me.lanzhi.bluestarbot.api.Contact;
 import me.lanzhi.bluestarbot.api.User;
 import net.mamoe.mirai.event.events.MessageEvent;
-import net.mamoe.mirai.message.data.QuoteReply;
+import net.mamoe.mirai.message.data.MessageSource;
 
 public interface MessageReceivedEvent
 {
@@ -13,9 +13,16 @@ public interface MessageReceivedEvent
 
     public Bot getBot();
 
-    public default int getTime()
+    public default void reply(String message)
     {
-        return getEvent().getTime();
+        MessageSource source=getEvent().getMessage().get(MessageSource.Key);
+        assert source!=null:"assertError:MessageSource is null(MessageReceivedEvent:50)";
+        getContact().reply(getSender(),
+                           getTime(),
+                           getMessageAsCode(),
+                           message,
+                           source.getIds()[0],
+                           (int) source.getTargetId());
     }
 
     public default String getMessage()
@@ -43,8 +50,8 @@ public interface MessageReceivedEvent
         return getSender().getName();
     }
 
-    public default void reply(String message)
+    public default long getTime()
     {
-        getSender().sendMessageCode(new QuoteReply(getEvent().getMessage())+message);
+        return getEvent().getTime()*1000L;
     }
 }

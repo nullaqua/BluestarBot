@@ -117,6 +117,12 @@ public final class NormalGroupMember extends GroupMember
     }
 
     @Override
+    public Type getType()
+    {
+        return Type.NormalMember;
+    }
+
+    @Override
     public String toString()
     {
         return "NormalGroupMember{bot:"+getBot().getId()+",group:"+getGroup().getId()+",id:"+getId()+"}";

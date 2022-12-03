@@ -14,4 +14,10 @@ public final class AnonymousGroupMember extends GroupMember
     {
         return "AnonymousGroupMember{bot:"+getBot().getId()+",group:"+getGroup().getId()+"}";
     }
+
+    @Override
+    public Type getType()
+    {
+        return Type.AnonymousMember;
+    }
 }

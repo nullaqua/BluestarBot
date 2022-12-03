@@ -13,12 +13,6 @@ public final class MemberJoinEvent extends BluestarBotEvent implements GroupMemb
     }
 
     @Override
-    public net.mamoe.mirai.event.events.MemberJoinEvent getEvent()
-    {
-        return (net.mamoe.mirai.event.events.MemberJoinEvent) super.getEvent();
-    }
-
-    @Override
     public NormalGroupMember getMember()
     {
         return getUser();
@@ -28,5 +22,11 @@ public final class MemberJoinEvent extends BluestarBotEvent implements GroupMemb
     public NormalGroupMember getUser()
     {
         return Mapping.map(getEvent().getMember());
+    }
+
+    @Override
+    public net.mamoe.mirai.event.events.MemberJoinEvent getEvent()
+    {
+        return (net.mamoe.mirai.event.events.MemberJoinEvent) super.getEvent();
     }
 }

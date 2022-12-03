@@ -85,27 +85,27 @@ public final class BluestarBot
         return bot;
     }
 
-    public void addBind(UUID uuid,long id)
+    public static void addBind(UUID uuid,long id)
     {
         plugin.getBind().addBind(uuid,id);
     }
 
-    public UUID getBind(long id)
+    public static UUID getBind(long id)
     {
         return plugin.getBind().getBind(id);
     }
 
-    public Long getBind(UUID uuid)
+    public static Long getBind(UUID uuid)
     {
         return plugin.getBind().getBind(uuid);
     }
 
-    public Long removeBind(UUID uuid)
+    public static Long removeBind(UUID uuid)
     {
         return plugin.getBind().removeBind(uuid);
     }
 
-    public UUID removeBind(long id)
+    public static UUID removeBind(long id)
     {
         return plugin.getBind().removeBind(id);
     }

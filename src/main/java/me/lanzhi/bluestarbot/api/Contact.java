@@ -1,10 +1,10 @@
 package me.lanzhi.bluestarbot.api;
 
+import me.lanzhi.api.Bluestar;
 import me.lanzhi.bluestarbot.Mapping;
 import net.mamoe.mirai.contact.ContactOrBot;
-import net.mamoe.mirai.message.data.FlashImage;
-import net.mamoe.mirai.message.data.MusicKind;
-import net.mamoe.mirai.message.data.MusicShare;
+import net.mamoe.mirai.message.code.MiraiCode;
+import net.mamoe.mirai.message.data.*;
 import net.mamoe.mirai.utils.ExternalResource;
 
 import java.io.File;
@@ -23,6 +23,13 @@ public abstract class Contact
         this.toContact=Mapping.toContact(contact);
     }
 
+    public final boolean nudge(User user)
+    {
+        return nudge(user.getId());
+    }
+
+    public abstract boolean nudge(long id);
+
     @Override
     public final boolean equals(Object obj)
     {
@@ -38,6 +45,11 @@ public abstract class Contact
         return contact;
     }
 
+    public net.mamoe.mirai.contact.Contact getToContact()
+    {
+        return toContact;
+    }
+
     public final void sendMessage(String message)
     {
         toContact.sendMessage(message);
@@ -45,17 +57,17 @@ public abstract class Contact
 
     public final void sendMessageCode(String message)
     {
-        toContact.sendMessage(message);
+        toContact.sendMessage(MiraiCode.deserializeMiraiCode(message));
     }
 
     public final String uploadImage(File file)
     {
-        return uploadImage(ExternalResource.create(file));
+        return uploadImage0(ExternalResource.create(file));
     }
 
-    public final String uploadImage(InputStream inputStream) throws IOException
+    protected final String uploadImage0(ExternalResource resource)
     {
-        return uploadImage(ExternalResource.create(inputStream));
+        return toContact.uploadImage(resource.toAutoCloseable()).getImageId();
     }
 
     public final void sendFlashImage(File file)
@@ -73,9 +85,9 @@ public abstract class Contact
         toContact.sendMessage(FlashImage.from(image));
     }
 
-    protected final String uploadImage(ExternalResource resource)
+    public final String uploadImage(InputStream inputStream) throws IOException
     {
-        return toContact.uploadImage(resource.toAutoCloseable()).getImageId();
+        return uploadImage0(ExternalResource.create(inputStream));
     }
 
     public abstract String getName();
@@ -90,7 +102,44 @@ public abstract class Contact
         return Mapping.map(contact.getBot());
     }
 
-    public abstract Type getChatType();
+    public void reply(User user,String originalMessage,String replyMessage)
+    {
+        reply(user,System.currentTimeMillis(),originalMessage,replyMessage);
+    }
+
+    public void reply(User user,long time,String originalMessage,String replyMessage)
+    {
+        reply(user,time,originalMessage,replyMessage,Bluestar.randomInt(),Bluestar.randomInt());
+    }
+
+    public void reply(User user,long time,String originalMessage,String replyMessage,int id0,int id1)
+    {
+        reply(user.getId(),time,originalMessage,replyMessage,id0,id1);
+    }
+
+    public void reply(long sender,long time,String originalMessage,String replyMessage,int id0,int id1)
+    {
+        MessageSourceBuilder sourceBuilder=new MessageSourceBuilder();
+        sourceBuilder.id(id0).internalId(id1).time((int) (time/1000L)).setFromId(sender);
+        sourceBuilder.messages(MiraiCode.deserializeMiraiCode(originalMessage)).target(getContact());
+        QuoteReply reply=new QuoteReply(sourceBuilder.build(getBot().getId(),getType().asMiraiMessageSourceKind()));
+
+        MessageChainBuilder builder=new MessageChainBuilder().append(reply);
+        MiraiCode.deserializeMiraiCode(replyMessage,toContact).forEach(builder::append);
+        toContact.sendMessage(builder.asMessageChain());
+    }
+
+    public abstract Type getType();
+
+    public void reply(long sender,String originalMessage,String replyMessage)
+    {
+        reply(sender,System.currentTimeMillis(),originalMessage,replyMessage);
+    }
+
+    public void reply(long sender,long time,String originalMessage,String replyMessage)
+    {
+        reply(sender,time,originalMessage,replyMessage,Bluestar.randomInt(),Bluestar.randomInt());
+    }
 
     public final String getAvatarUrl()
     {
@@ -129,6 +178,24 @@ public abstract class Contact
 
     public enum Type
     {
-        GROUP,FRIEND,STRANGER,MEMBER,OTHER_CLIENT
+        Bot(MessageSourceKind.FRIEND),
+        Group(MessageSourceKind.GROUP),
+        Friend(MessageSourceKind.FRIEND),
+        Stranger(MessageSourceKind.STRANGER),
+        NormalMember(MessageSourceKind.TEMP),
+        AnonymousMember(MessageSourceKind.TEMP),
+        OtherClient(null),
+        Unknown(null);
+        private final MessageSourceKind kind;
+
+        Type(MessageSourceKind kind)
+        {
+            this.kind=kind;
+        }
+
+        public MessageSourceKind asMiraiMessageSourceKind()
+        {
+            return kind;
+        }
     }
 }

@@ -13,14 +13,14 @@ public final class FriendAddEvent extends BluestarBotEvent implements FriendEven
     }
 
     @Override
-    public net.mamoe.mirai.event.events.FriendAddEvent getEvent()
-    {
-        return (net.mamoe.mirai.event.events.FriendAddEvent) super.getEvent();
-    }
-
-    @Override
     public Friend getUser()
     {
         return Mapping.map(getEvent().getFriend());
+    }
+
+    @Override
+    public net.mamoe.mirai.event.events.FriendAddEvent getEvent()
+    {
+        return (net.mamoe.mirai.event.events.FriendAddEvent) super.getEvent();
     }
 }

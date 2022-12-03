@@ -12,15 +12,15 @@ public final class MemberUnmuteEvent extends BluestarBotEvent implements GroupMe
         super(event);
     }
 
+    public GroupMember getOperator()
+    {
+        return Mapping.map(getEvent().getOperator());
+    }
+
     @Override
     public net.mamoe.mirai.event.events.MemberUnmuteEvent getEvent()
     {
         return (net.mamoe.mirai.event.events.MemberUnmuteEvent) super.getEvent();
-    }
-
-    public GroupMember getOperator()
-    {
-        return Mapping.map(getEvent().getOperator());
     }
 
     @Override

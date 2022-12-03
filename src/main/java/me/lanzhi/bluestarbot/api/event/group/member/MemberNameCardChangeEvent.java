@@ -13,15 +13,15 @@ public final class MemberNameCardChangeEvent extends BluestarBotEvent implements
         super(event);
     }
 
+    public String getNew()
+    {
+        return getEvent().getNew();
+    }
+
     @Override
     public MemberCardChangeEvent getEvent()
     {
         return (MemberCardChangeEvent) super.getEvent();
-    }
-
-    public String getNew()
-    {
-        return getEvent().getNew();
     }
 
     public String getOld()

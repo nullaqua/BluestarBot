@@ -13,15 +13,15 @@ public final class MemberPermissionChangeEvent extends BluestarBotEvent implemen
         super(event);
     }
 
+    public MemberPermission getNew()
+    {
+        return Mapping.map(getEvent().getNew());
+    }
+
     @Override
     public net.mamoe.mirai.event.events.MemberPermissionChangeEvent getEvent()
     {
         return (net.mamoe.mirai.event.events.MemberPermissionChangeEvent) super.getEvent();
-    }
-
-    public MemberPermission getNew()
-    {
-        return Mapping.map(getEvent().getNew());
     }
 
     public MemberPermission getOld()

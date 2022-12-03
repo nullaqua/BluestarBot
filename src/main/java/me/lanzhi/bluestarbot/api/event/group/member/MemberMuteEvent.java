@@ -12,15 +12,15 @@ public final class MemberMuteEvent extends BluestarBotEvent implements GroupMemb
         super(event);
     }
 
+    public int getDurationSeconds()
+    {
+        return getEvent().getDurationSeconds();
+    }
+
     @Override
     public net.mamoe.mirai.event.events.MemberMuteEvent getEvent()
     {
         return (net.mamoe.mirai.event.events.MemberMuteEvent) super.getEvent();
-    }
-
-    public int getDurationSeconds()
-    {
-        return getEvent().getDurationSeconds();
     }
 
     public GroupMember getOperator()

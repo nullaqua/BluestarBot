@@ -10,15 +10,15 @@ public final class BotNickChangedEvent extends BluestarBotEvent implements BotEv
         super(event);
     }
 
+    public String getOld()
+    {
+        return getEvent().getFrom();
+    }
+
     @Override
     public net.mamoe.mirai.event.events.BotNickChangedEvent getEvent()
     {
         return (net.mamoe.mirai.event.events.BotNickChangedEvent) super.getEvent();
-    }
-
-    public String getOld()
-    {
-        return getEvent().getFrom();
     }
 
     public String getNew()

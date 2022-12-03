@@ -7,7 +7,6 @@ import me.lanzhi.bluestarbot.api.event.BluestarBotEvent;
 
 public final class NudgeEvent extends BluestarBotEvent
 {
-
     public NudgeEvent(net.mamoe.mirai.event.events.NudgeEvent event)
     {
         super(event);
@@ -24,13 +23,35 @@ public final class NudgeEvent extends BluestarBotEvent
         return Mapping.map(getEvent().getSubject());
     }
 
+
     public User getFrom()
     {
         return Mapping.map(getEvent().getFrom());
     }
 
+    public User getRecipient()
+    {
+        return getTo();
+    }
+
+
     public User getTo()
     {
         return Mapping.map(getEvent().getTarget());
+    }
+
+    public void nudgeToSender()
+    {
+        getContact().nudge(getSender());
+    }
+
+    public User getSender()
+    {
+        return getFrom();
+    }
+
+    public void nudgeToRecipient()
+    {
+        getContact().nudge(getTo());
     }
 }

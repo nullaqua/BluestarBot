@@ -10,14 +10,14 @@ public final class BotReLoginEvent extends BluestarBotEvent implements BotEvent
         super(event);
     }
 
+    public Throwable getCause()
+    {
+        return getEvent().getCause();
+    }
+
     @Override
     public net.mamoe.mirai.event.events.BotReloginEvent getEvent()
     {
         return (net.mamoe.mirai.event.events.BotReloginEvent) super.getEvent();
-    }
-
-    public Throwable getCause()
-    {
-        return getEvent().getCause();
     }
 }

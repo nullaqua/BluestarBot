@@ -13,16 +13,24 @@ public final class OtherClient extends Contact
     }
 
     @Override
+    public boolean nudge(long id)
+    {
+        return false;
+    }
+
+    @Override
     public String getName()
     {
         return getOtherClient().getInfo().getDeviceName();
     }
 
+
     @Override
-    public Type getChatType()
+    public Type getType()
     {
-        return Type.OTHER_CLIENT;
+        return Type.OtherClient;
     }
+
     @Override
     public String toString()
     {

@@ -71,7 +71,7 @@ public final class BluestarBotPlugin extends JavaPlugin
     @Override
     public void onEnable()
     {
-        autoLogin.loginAll();
+        Bukkit.getScheduler().runTaskAsynchronously(this,()->autoLogin.loginAll());
         getCommand("bluestarbot").setExecutor(new BluestarBotCommand(this));
         Manager.registerEvents();
         Bukkit.getPluginManager().registerEvents(new TestListener(this),this);

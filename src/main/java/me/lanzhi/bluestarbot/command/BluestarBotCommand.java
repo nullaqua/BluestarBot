@@ -77,8 +77,11 @@ public final class BluestarBotCommand implements CommandExecutor, TabExecutor
                     sender.sendMessage("/bluestarqq login qqid password");
                     return;
                 }
-                BluestarBot.createBot(Long.parseLong(args[1]),args[2]);
-                sender.sendMessage(ChatColor.GREEN+"操作成功");
+                Bukkit.getScheduler().runTaskAsynchronously(plugin,()->
+                {
+                    BluestarBot.createBot(Long.parseLong(args[1]),args[2]);
+                    sender.sendMessage(ChatColor.GREEN+"操作成功");
+                });
                 return;
             }
             case "verify":
@@ -162,8 +165,11 @@ public final class BluestarBotCommand implements CommandExecutor, TabExecutor
                     }
                     case "loginall":
                     {
-                        plugin.getAutoLogin().loginAll();
-                        sender.sendMessage(ChatColor.GREEN+"操作成功");
+                        Bukkit.getScheduler().runTaskAsynchronously(plugin,()->
+                        {
+                            plugin.getAutoLogin().loginAll();
+                            sender.sendMessage(ChatColor.GREEN+"操作成功");
+                        });
                         return;
                     }
                     default:

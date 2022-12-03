@@ -15,9 +15,9 @@ public final class Friend extends User implements SendAudioAble
     }
 
     @Override
-    public Contact.Type getChatType()
+    public Contact.Type getType()
     {
-        return Contact.Type.FRIEND;
+        return Type.Friend;
     }
 
     @Override
@@ -26,20 +26,13 @@ public final class Friend extends User implements SendAudioAble
         return getFriend().getNick();
     }
 
-    @Override
-    public User.Type getUserType()
-    {
-        return User.Type.FRIEND;
-    }
-
-
     public void delete()
     {
         getFriend().delete();
     }
 
     @Override
-    public void sendAudio(ExternalResource resource)
+    public void sendAudio0(ExternalResource resource)
     {
         this.getFriend().sendMessage(this.getFriend().uploadAudio(resource.toAutoCloseable()));
     }

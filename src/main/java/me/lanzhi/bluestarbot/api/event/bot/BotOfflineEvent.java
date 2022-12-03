@@ -10,10 +10,13 @@ public final class BotOfflineEvent extends BluestarBotEvent implements BotEvent
         super(event);
     }
 
-    @Override
-    public net.mamoe.mirai.event.events.BotOfflineEvent getEvent()
+    public String getMessage()
     {
-        return (net.mamoe.mirai.event.events.BotOfflineEvent) super.getEvent();
+        if (getType()==Type.Force)
+        {
+            ((net.mamoe.mirai.event.events.BotOfflineEvent.Force) getEvent()).getMessage();
+        }
+        return null;
     }
 
     public Type getType()
@@ -41,17 +44,18 @@ public final class BotOfflineEvent extends BluestarBotEvent implements BotEvent
         return null;
     }
 
-    public String getMessage()
+    @Override
+    public net.mamoe.mirai.event.events.BotOfflineEvent getEvent()
     {
-        if (getType()==Type.Force)
-        {
-            ((net.mamoe.mirai.event.events.BotOfflineEvent.Force) getEvent()).getMessage();
-        }
-        return null;
+        return (net.mamoe.mirai.event.events.BotOfflineEvent) super.getEvent();
     }
 
     public enum Type
     {
-        Active,Force,Dropped,RequireReconnect,MsfOffline
+        Active,
+        Force,
+        Dropped,
+        RequireReconnect,
+        MsfOffline
     }
 }

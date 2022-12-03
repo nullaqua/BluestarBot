@@ -13,14 +13,14 @@ public final class MemberLeaveEvent extends BluestarBotEvent implements GroupMem
     }
 
     @Override
-    public net.mamoe.mirai.event.events.MemberLeaveEvent getEvent()
-    {
-        return (net.mamoe.mirai.event.events.MemberLeaveEvent) super.getEvent();
-    }
-
-    @Override
     public GroupMember getUser()
     {
         return Mapping.map(getEvent().getMember());
+    }
+
+    @Override
+    public net.mamoe.mirai.event.events.MemberLeaveEvent getEvent()
+    {
+        return (net.mamoe.mirai.event.events.MemberLeaveEvent) super.getEvent();
     }
 }

@@ -22,11 +22,6 @@ public class MiraiLoader
         load("net.mamoe","mirai-core-all","2.11.1");
     }
 
-    public static void load(String group,String id) throws IOException, ParserConfigurationException, SAXException
-    {
-        load(group,id,"latest");
-    }
-
     public static void load(String group,String id,String version) throws RuntimeException, IOException, ParserConfigurationException, SAXException
     {
         if (version.equalsIgnoreCase("latest"))
@@ -84,5 +79,10 @@ public class MiraiLoader
                 Bukkit.getLogger().warning("No local core found.");
             }
         }
+    }
+
+    public static void load(String group,String id) throws IOException, ParserConfigurationException, SAXException
+    {
+        load(group,id,"latest");
     }
 }

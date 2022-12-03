@@ -36,16 +36,11 @@ public class GroupMember extends User
     }
 
     @Override
-    public Contact.Type getChatType()
+    public Contact.Type getType()
     {
-        return Contact.Type.MEMBER;
+        return Type.Unknown;
     }
 
-    @Override
-    public Type getUserType()
-    {
-        return Type.MEMBER;
-    }
 
     public String getNameCard()
     {

@@ -11,15 +11,15 @@ public final class NewFriendRequestEvent extends BluestarBotEvent
         super(event);
     }
 
+    public String getUserName()
+    {
+        return getEvent().getFromNick();
+    }
+
     @Override
     public net.mamoe.mirai.event.events.NewFriendRequestEvent getEvent()
     {
         return (net.mamoe.mirai.event.events.NewFriendRequestEvent) super.getEvent();
-    }
-
-    public String getUserName()
-    {
-        return getEvent().getFromNick();
     }
 
     public long getUserId()

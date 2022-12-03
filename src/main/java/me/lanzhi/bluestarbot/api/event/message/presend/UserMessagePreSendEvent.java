@@ -14,9 +14,9 @@ public abstract class UserMessagePreSendEvent extends BluestarBotEvent implement
     }
 
     @Override
-    public net.mamoe.mirai.event.events.UserMessagePreSendEvent getEvent()
+    public User getUser()
     {
-        return (net.mamoe.mirai.event.events.UserMessagePreSendEvent) super.getEvent();
+        return getContact();
     }
 
     @Override
@@ -26,8 +26,8 @@ public abstract class UserMessagePreSendEvent extends BluestarBotEvent implement
     }
 
     @Override
-    public User getUser()
+    public net.mamoe.mirai.event.events.UserMessagePreSendEvent getEvent()
     {
-        return getContact();
+        return (net.mamoe.mirai.event.events.UserMessagePreSendEvent) super.getEvent();
     }
 }

@@ -16,15 +16,9 @@ public final class GroupRecallEvent extends BluestarBotEvent implements MessageR
     }
 
     @Override
-    public net.mamoe.mirai.event.events.MessageRecallEvent.GroupRecall getEvent()
+    public GroupMember getUser()
     {
-        return (net.mamoe.mirai.event.events.MessageRecallEvent.GroupRecall) super.getEvent();
-    }
-
-    @Override
-    public NormalGroupMember getSender()
-    {
-        return Mapping.map(getEvent().getAuthor());
+        return getSender();
     }
 
     @Override
@@ -34,8 +28,14 @@ public final class GroupRecallEvent extends BluestarBotEvent implements MessageR
     }
 
     @Override
-    public GroupMember getUser()
+    public NormalGroupMember getSender()
     {
-        return getSender();
+        return Mapping.map(getEvent().getAuthor());
+    }
+
+    @Override
+    public net.mamoe.mirai.event.events.MessageRecallEvent.GroupRecall getEvent()
+    {
+        return (net.mamoe.mirai.event.events.MessageRecallEvent.GroupRecall) super.getEvent();
     }
 }
