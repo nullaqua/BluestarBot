@@ -1,4 +1,4 @@
-package me.lanzhi.bluestarbot.internal.command;
+package me.lanzhi.bluestarbot.internal;
 
 import me.lanzhi.bluestarbot.BluestarBotPlugin;
 import me.lanzhi.bluestarbot.api.BluestarBot;
@@ -22,6 +22,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
+/**
+ * 插件指令处理类
+ */
 public final class BluestarBotCommand implements CommandExecutor, TabExecutor
 {
     private final BluestarBotPlugin plugin;

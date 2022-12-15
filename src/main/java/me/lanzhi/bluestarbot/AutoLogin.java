@@ -8,6 +8,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 处理自动登录的机器人,属于内部类,勿动
+ */
 public final class AutoLogin implements Serializable
 {
     private static final long serialVersionUID=0L;
