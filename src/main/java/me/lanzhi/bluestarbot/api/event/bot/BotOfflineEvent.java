@@ -2,7 +2,12 @@ package me.lanzhi.bluestarbot.api.event.bot;
 
 import me.lanzhi.bluestarbot.api.event.BluestarBotEvent;
 import me.lanzhi.bluestarbot.api.event.BotEvent;
+import org.jetbrains.annotations.Nullable;
 
+/**
+ * bot退出登录事件
+ * 注: 除被挤下线外,会自动尝试重新连接,被挤下线不会
+ */
 public final class BotOfflineEvent extends BluestarBotEvent implements BotEvent
 {
     public BotOfflineEvent(net.mamoe.mirai.event.events.BotOfflineEvent event)
@@ -10,6 +15,12 @@ public final class BotOfflineEvent extends BluestarBotEvent implements BotEvent
         super(event);
     }
 
+    /**
+     * 获取掉线消息,可能为null
+     *
+     * @return 消息
+     */
+    @Nullable
     public String getMessage()
     {
         if (getType()==Type.Force)
@@ -19,6 +30,12 @@ public final class BotOfflineEvent extends BluestarBotEvent implements BotEvent
         return null;
     }
 
+    /**
+     * 退出原因类型
+     *
+     * @return 类型
+     * @see Type 类型
+     */
     public Type getType()
     {
         if (getEvent() instanceof net.mamoe.mirai.event.events.BotOfflineEvent.Active)
@@ -52,10 +69,25 @@ public final class BotOfflineEvent extends BluestarBotEvent implements BotEvent
 
     public enum Type
     {
+        /**
+         * 主动退出
+         */
         Active,
+        /**
+         * 被挤下线
+         */
         Force,
+        /**
+         * 因网络问题断开
+         */
         Dropped,
+        /**
+         * 服务器主动要求更换另一个服务器
+         */
         RequireReconnect,
+        /**
+         * 被服务器断开
+         */
         MsfOffline
     }
 }

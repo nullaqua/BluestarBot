@@ -1,11 +1,15 @@
 package me.lanzhi.bluestarbot.api.event;
 
-import me.lanzhi.bluestarbot.Mapping;
 import me.lanzhi.bluestarbot.api.Bot;
+import me.lanzhi.bluestarbot.internal.Mapping;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
+/**
+ * 机器人相关消息
+ * 注: 虽然事件实现Cancellable,但不一定可以撤销
+ */
 public abstract class BluestarBotEvent extends Event implements Cancellable
 {
     private final net.mamoe.mirai.event.events.BotEvent event;
@@ -35,6 +39,9 @@ public abstract class BluestarBotEvent extends Event implements Cancellable
         return handlerList;
     }
 
+    /**
+     * @return 事件关联的机器人
+     */
     public final Bot getBot()
     {
         return Mapping.map(getEvent().getBot());

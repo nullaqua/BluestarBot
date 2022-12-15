@@ -3,8 +3,12 @@ package me.lanzhi.bluestarbot;
 import me.lanzhi.api.reflect.FieldAccessor;
 import me.lanzhi.bluestarbot.api.BluestarBot;
 import me.lanzhi.bluestarbot.api.event.BluestarBotEvent;
-import me.lanzhi.bluestarbot.classloader.MiraiLoader;
-import me.lanzhi.bluestarbot.command.BluestarBotCommand;
+import me.lanzhi.bluestarbot.internal.Manager;
+import me.lanzhi.bluestarbot.internal.TestListener;
+import me.lanzhi.bluestarbot.internal.Utils;
+import me.lanzhi.bluestarbot.internal.classloader.MiraiLoader;
+import me.lanzhi.bluestarbot.internal.classloader.URLClassLoaderAccess;
+import me.lanzhi.bluestarbot.internal.command.BluestarBotCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -12,6 +16,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.URLClassLoader;
 import java.nio.file.Files;
 import java.util.HashSet;
 import java.util.Set;
@@ -26,8 +31,10 @@ public final class BluestarBotPlugin extends JavaPlugin
     @Override
     public void onLoad()
     {
+        Utils.setLogger(this.getLogger());
         try
         {
+            MiraiLoader.setClassLoaderAccess(URLClassLoaderAccess.create((URLClassLoader) this.getClassLoader()));
             MiraiLoader.loadMiraiCore();
             System.setProperty("mirai.no-desktop","BluestarBot");
             System.setProperty("mirai.slider.captcha.supported","BluestarBot");

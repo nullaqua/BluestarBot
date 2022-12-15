@@ -1,10 +1,13 @@
 package me.lanzhi.bluestarbot.api.event.group.member.list;
 
-import me.lanzhi.bluestarbot.Mapping;
-import me.lanzhi.bluestarbot.api.GroupMember;
+import me.lanzhi.bluestarbot.api.contact.group.GroupMember;
 import me.lanzhi.bluestarbot.api.event.BluestarBotEvent;
 import me.lanzhi.bluestarbot.api.event.GroupMemberEvent;
+import me.lanzhi.bluestarbot.internal.Mapping;
 
+/**
+ * 用户离开群聊事件
+ */
 public final class MemberLeaveEvent extends BluestarBotEvent implements GroupMemberEvent
 {
     public MemberLeaveEvent(net.mamoe.mirai.event.events.MemberLeaveEvent event)

@@ -1,11 +1,14 @@
 package me.lanzhi.bluestarbot.api.event.group.setting;
 
-import me.lanzhi.bluestarbot.Mapping;
-import me.lanzhi.bluestarbot.api.Group;
-import me.lanzhi.bluestarbot.api.NormalGroupMember;
+import me.lanzhi.bluestarbot.api.contact.group.Group;
+import me.lanzhi.bluestarbot.api.contact.group.NormalGroupMember;
 import me.lanzhi.bluestarbot.api.event.BluestarBotEvent;
 import me.lanzhi.bluestarbot.api.event.GroupSettingChangeEvent;
+import me.lanzhi.bluestarbot.internal.Mapping;
 
+/**
+ * 群名称变化事件
+ */
 public final class GroupNameChangeEvent extends BluestarBotEvent implements GroupSettingChangeEvent
 {
     public GroupNameChangeEvent(net.mamoe.mirai.event.events.GroupNameChangeEvent event)
@@ -35,6 +38,9 @@ public final class GroupNameChangeEvent extends BluestarBotEvent implements Grou
         return getEvent().getOrigin();
     }
 
+    /**
+     * @return 操作人
+     */
     public NormalGroupMember getOperator()
     {
         return Mapping.map(getEvent().getOperator());

@@ -1,12 +1,14 @@
 package me.lanzhi.bluestarbot.api.event.message.postsend;
 
-import me.lanzhi.bluestarbot.Mapping;
-import me.lanzhi.bluestarbot.api.User;
+import me.lanzhi.bluestarbot.api.contact.User;
 import me.lanzhi.bluestarbot.api.event.BluestarBotEvent;
 import me.lanzhi.bluestarbot.api.event.MessagePostSendEvent;
 import me.lanzhi.bluestarbot.api.event.UserEvent;
-import net.mamoe.mirai.message.data.MessageSource;
+import me.lanzhi.bluestarbot.internal.Mapping;
 
+/**
+ * 向用户私聊发送消息事件
+ */
 public abstract class UserMessagePostSendEvent extends BluestarBotEvent implements MessagePostSendEvent, UserEvent
 {
     public UserMessagePostSendEvent(net.mamoe.mirai.event.events.UserMessagePostSendEvent<?> event)
@@ -24,12 +26,6 @@ public abstract class UserMessagePostSendEvent extends BluestarBotEvent implemen
     public User getContact()
     {
         return Mapping.map(getEvent().getTarget());
-    }
-
-    @Override
-    public void recall()
-    {
-        MessageSource.recall(getEvent().getMessage());
     }
 
     @Override

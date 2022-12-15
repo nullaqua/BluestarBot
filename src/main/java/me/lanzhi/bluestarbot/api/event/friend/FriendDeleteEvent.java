@@ -1,10 +1,13 @@
 package me.lanzhi.bluestarbot.api.event.friend;
 
-import me.lanzhi.bluestarbot.Mapping;
-import me.lanzhi.bluestarbot.api.Friend;
+import me.lanzhi.bluestarbot.api.contact.Friend;
 import me.lanzhi.bluestarbot.api.event.BluestarBotEvent;
 import me.lanzhi.bluestarbot.api.event.FriendEvent;
+import me.lanzhi.bluestarbot.internal.Mapping;
 
+/**
+ * 好友删除事件
+ */
 public final class FriendDeleteEvent extends BluestarBotEvent implements FriendEvent
 {
     public FriendDeleteEvent(net.mamoe.mirai.event.events.FriendDeleteEvent event)
@@ -12,6 +15,11 @@ public final class FriendDeleteEvent extends BluestarBotEvent implements FriendE
         super(event);
     }
 
+    /**
+     * 被删除的好友
+     *
+     * @return 好友
+     */
     @Override
     public Friend getUser()
     {

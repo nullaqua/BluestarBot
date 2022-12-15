@@ -1,8 +1,14 @@
 package me.lanzhi.bluestarbot.api.event.bot;
 
+import me.lanzhi.bluestarbot.api.Bot;
 import me.lanzhi.bluestarbot.api.event.BluestarBotEvent;
 import me.lanzhi.bluestarbot.api.event.BotEvent;
 
+/**
+ * 机器人头像改变事件
+ *
+ * @see Bot#getAvatarUrl() 获取头像
+ */
 public final class BotAvatarChangedEvent extends BluestarBotEvent implements BotEvent
 {
     public BotAvatarChangedEvent(net.mamoe.mirai.event.events.BotAvatarChangedEvent event)

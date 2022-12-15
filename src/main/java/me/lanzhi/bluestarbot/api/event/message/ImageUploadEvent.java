@@ -1,11 +1,14 @@
 package me.lanzhi.bluestarbot.api.event.message;
 
-import me.lanzhi.bluestarbot.Mapping;
-import me.lanzhi.bluestarbot.api.Contact;
+import me.lanzhi.bluestarbot.api.contact.Contact;
 import me.lanzhi.bluestarbot.api.event.BluestarBotEvent;
+import me.lanzhi.bluestarbot.internal.Mapping;
 
 import java.io.InputStream;
 
+/**
+ * 图片上传事件,上传后触发
+ */
 public final class ImageUploadEvent extends BluestarBotEvent
 {
     public ImageUploadEvent(net.mamoe.mirai.event.events.ImageUploadEvent event)

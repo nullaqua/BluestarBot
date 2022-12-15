@@ -1,10 +1,13 @@
 package me.lanzhi.bluestarbot.api.event.friend;
 
-import me.lanzhi.bluestarbot.Mapping;
-import me.lanzhi.bluestarbot.api.Friend;
+import me.lanzhi.bluestarbot.api.contact.Friend;
 import me.lanzhi.bluestarbot.api.event.BluestarBotEvent;
 import me.lanzhi.bluestarbot.api.event.FriendEvent;
+import me.lanzhi.bluestarbot.internal.Mapping;
 
+/**
+ * 好友输入状态改变事件
+ */
 public final class FriendInputStatusChangedEvent extends BluestarBotEvent implements FriendEvent
 {
     public FriendInputStatusChangedEvent(net.mamoe.mirai.event.events.FriendInputStatusChangedEvent event)
@@ -24,6 +27,11 @@ public final class FriendInputStatusChangedEvent extends BluestarBotEvent implem
         return (net.mamoe.mirai.event.events.FriendInputStatusChangedEvent) super.getEvent();
     }
 
+    /**
+     * 是否正在输入中
+     *
+     * @return true表示正在输入
+     */
     public boolean isInputting()
     {
         return getEvent().getInputting();

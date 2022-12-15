@@ -1,10 +1,12 @@
 package me.lanzhi.bluestarbot.api.event.message.postsend;
 
-import me.lanzhi.bluestarbot.Mapping;
-import me.lanzhi.bluestarbot.api.Stranger;
+import me.lanzhi.bluestarbot.api.contact.Stranger;
 import me.lanzhi.bluestarbot.api.event.StrangerEvent;
-import net.mamoe.mirai.message.data.MessageSource;
+import me.lanzhi.bluestarbot.internal.Mapping;
 
+/**
+ * 陌生人消息发送事件
+ */
 public final class StrangerMessagePostSendEvent extends UserMessagePostSendEvent implements StrangerEvent
 {
     public StrangerMessagePostSendEvent(net.mamoe.mirai.event.events.StrangerMessagePostSendEvent event)
@@ -16,12 +18,6 @@ public final class StrangerMessagePostSendEvent extends UserMessagePostSendEvent
     public net.mamoe.mirai.event.events.StrangerMessagePostSendEvent getEvent()
     {
         return (net.mamoe.mirai.event.events.StrangerMessagePostSendEvent) super.getEvent();
-    }
-
-    @Override
-    public void recall()
-    {
-        MessageSource.recall(getEvent().getMessage());
     }
 
     @Override

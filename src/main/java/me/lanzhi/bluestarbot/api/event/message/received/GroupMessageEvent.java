@@ -1,12 +1,18 @@
 package me.lanzhi.bluestarbot.api.event.message.received;
 
-import me.lanzhi.bluestarbot.Mapping;
-import me.lanzhi.bluestarbot.api.Group;
-import me.lanzhi.bluestarbot.api.GroupMember;
+import me.lanzhi.bluestarbot.api.contact.group.Group;
+import me.lanzhi.bluestarbot.api.contact.group.GroupMember;
 import me.lanzhi.bluestarbot.api.event.BluestarBotEvent;
 import me.lanzhi.bluestarbot.api.event.GroupMemberEvent;
 import me.lanzhi.bluestarbot.api.event.MessageReceivedEvent;
+import me.lanzhi.bluestarbot.internal.Mapping;
+import net.mamoe.mirai.message.data.MessageSource;
 
+import java.util.function.BooleanSupplier;
+
+/**
+ * 接受到群消息
+ */
 public final class GroupMessageEvent extends BluestarBotEvent implements MessageReceivedEvent, GroupMemberEvent
 {
     public GroupMessageEvent(net.mamoe.mirai.event.events.GroupMessageEvent event)
@@ -42,5 +48,30 @@ public final class GroupMessageEvent extends BluestarBotEvent implements Message
     public GroupMember getUser()
     {
         return getSender();
+    }
+
+    public boolean recall()
+    {
+        try
+        {
+            MessageSource.recall(getEvent().getMessage());
+            return true;
+        }
+        catch (Exception e)
+        {
+            return false;
+        }
+    }
+
+    public BooleanSupplier recall(int seconds)
+    {
+        try
+        {
+            return MessageSource.recallIn(getEvent().getMessage(),seconds)::awaitIsSuccess;
+        }
+        catch (Exception e)
+        {
+            return ()->false;
+        }
     }
 }

@@ -1,10 +1,13 @@
 package me.lanzhi.bluestarbot.api.event.group;
 
-import me.lanzhi.bluestarbot.Mapping;
-import me.lanzhi.bluestarbot.api.Group;
+import me.lanzhi.bluestarbot.api.contact.group.Group;
 import me.lanzhi.bluestarbot.api.event.BluestarBotEvent;
 import me.lanzhi.bluestarbot.api.event.GroupEvent;
+import me.lanzhi.bluestarbot.internal.Mapping;
 
+/**
+ * 机器人加入群聊事件
+ */
 public final class BotJoinGroupEvent extends BluestarBotEvent implements GroupEvent
 {
     public BotJoinGroupEvent(net.mamoe.mirai.event.events.BotJoinGroupEvent event)

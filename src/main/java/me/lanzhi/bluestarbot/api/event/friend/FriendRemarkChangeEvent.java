@@ -1,10 +1,13 @@
 package me.lanzhi.bluestarbot.api.event.friend;
 
-import me.lanzhi.bluestarbot.Mapping;
-import me.lanzhi.bluestarbot.api.Friend;
+import me.lanzhi.bluestarbot.api.contact.Friend;
 import me.lanzhi.bluestarbot.api.event.BluestarBotEvent;
 import me.lanzhi.bluestarbot.api.event.FriendEvent;
+import me.lanzhi.bluestarbot.internal.Mapping;
 
+/**
+ * 好友的备注修改事件
+ */
 public final class FriendRemarkChangeEvent extends BluestarBotEvent implements FriendEvent
 {
     public FriendRemarkChangeEvent(net.mamoe.mirai.event.events.FriendRemarkChangeEvent event)
@@ -24,11 +27,17 @@ public final class FriendRemarkChangeEvent extends BluestarBotEvent implements F
         return (net.mamoe.mirai.event.events.FriendRemarkChangeEvent) super.getEvent();
     }
 
+    /**
+     * @return 旧备注
+     */
     public String getOld()
     {
         return getEvent().getOldRemark();
     }
 
+    /**
+     * @return 新备注
+     */
     public String getNew()
     {
         return getEvent().getNewRemark();

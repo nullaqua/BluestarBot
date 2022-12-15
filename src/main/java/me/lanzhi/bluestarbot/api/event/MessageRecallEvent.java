@@ -1,22 +1,36 @@
 package me.lanzhi.bluestarbot.api.event;
 
-import me.lanzhi.bluestarbot.Mapping;
 import me.lanzhi.bluestarbot.api.Bot;
-import me.lanzhi.bluestarbot.api.User;
+import me.lanzhi.bluestarbot.api.contact.User;
+import me.lanzhi.bluestarbot.internal.Mapping;
 
+import java.util.Date;
+
+/**
+ * 消息撤回事件
+ */
 public interface MessageRecallEvent
 {
     public net.mamoe.mirai.event.events.MessageRecallEvent getEvent();
 
+    /**
+     * @return 所属机器人
+     */
     public Bot getBot();
 
+    /**
+     * @return 发送人
+     */
     public default User getSender()
     {
         return Mapping.map(getEvent().getAuthor());
     }
 
-    public default int getTime()
+    /**
+     * 发送时间
+     */
+    public default Date getTime()
     {
-        return getEvent().getMessageTime();
+        return new Date(getEvent().getMessageTime()*1000L);
     }
 }

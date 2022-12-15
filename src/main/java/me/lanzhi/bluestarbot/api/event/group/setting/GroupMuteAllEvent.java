@@ -1,11 +1,14 @@
 package me.lanzhi.bluestarbot.api.event.group.setting;
 
-import me.lanzhi.bluestarbot.Mapping;
-import me.lanzhi.bluestarbot.api.Group;
-import me.lanzhi.bluestarbot.api.NormalGroupMember;
+import me.lanzhi.bluestarbot.api.contact.group.Group;
+import me.lanzhi.bluestarbot.api.contact.group.NormalGroupMember;
 import me.lanzhi.bluestarbot.api.event.BluestarBotEvent;
 import me.lanzhi.bluestarbot.api.event.GroupSettingChangeEvent;
+import me.lanzhi.bluestarbot.internal.Mapping;
 
+/**
+ * 禁言所有人状态变化事件
+ */
 public final class GroupMuteAllEvent extends BluestarBotEvent implements GroupSettingChangeEvent
 {
     public GroupMuteAllEvent(net.mamoe.mirai.event.events.GroupMuteAllEvent event)
@@ -35,6 +38,9 @@ public final class GroupMuteAllEvent extends BluestarBotEvent implements GroupSe
         return getEvent().getOrigin();
     }
 
+    /**
+     * @return 操作人
+     */
     public NormalGroupMember getOperator()
     {
         return Mapping.map(getEvent().getOperator());

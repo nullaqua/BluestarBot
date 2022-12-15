@@ -1,11 +1,14 @@
 package me.lanzhi.bluestarbot.api.event.group;
 
-import me.lanzhi.bluestarbot.Mapping;
-import me.lanzhi.bluestarbot.api.Group;
-import me.lanzhi.bluestarbot.api.NormalGroupMember;
+import me.lanzhi.bluestarbot.api.contact.group.Group;
+import me.lanzhi.bluestarbot.api.contact.group.NormalGroupMember;
 import me.lanzhi.bluestarbot.api.event.BluestarBotEvent;
 import me.lanzhi.bluestarbot.api.event.GroupEvent;
+import me.lanzhi.bluestarbot.internal.Mapping;
 
+/**
+ * 机器人被禁言事件
+ */
 public final class BotMuteEvent extends BluestarBotEvent implements GroupEvent
 {
     public BotMuteEvent(net.mamoe.mirai.event.events.BotMuteEvent event)
@@ -19,11 +22,17 @@ public final class BotMuteEvent extends BluestarBotEvent implements GroupEvent
         return (net.mamoe.mirai.event.events.BotMuteEvent) super.getEvent();
     }
 
+    /**
+     * @return 被禁言的时间,单位:秒
+     */
     public int getDurationSeconds()
     {
         return getEvent().getDurationSeconds();
     }
 
+    /**
+     * @return 操作人
+     */
     public NormalGroupMember getOperator()
     {
         return Mapping.map(getEvent().getOperator());

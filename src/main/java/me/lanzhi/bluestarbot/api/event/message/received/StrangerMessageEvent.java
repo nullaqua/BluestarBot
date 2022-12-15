@@ -1,10 +1,13 @@
 package me.lanzhi.bluestarbot.api.event.message.received;
 
-import me.lanzhi.bluestarbot.Mapping;
-import me.lanzhi.bluestarbot.api.Stranger;
+import me.lanzhi.bluestarbot.api.contact.Stranger;
 import me.lanzhi.bluestarbot.api.event.MessageReceivedEvent;
 import me.lanzhi.bluestarbot.api.event.StrangerEvent;
+import me.lanzhi.bluestarbot.internal.Mapping;
 
+/**
+ * 接收到陌生人消息
+ */
 public final class StrangerMessageEvent extends UserMessageEvent implements StrangerEvent, MessageReceivedEvent
 {
     @Override

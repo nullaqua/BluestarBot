@@ -1,11 +1,14 @@
 package me.lanzhi.bluestarbot.api.event.message.received;
 
-import me.lanzhi.bluestarbot.Mapping;
-import me.lanzhi.bluestarbot.api.User;
+import me.lanzhi.bluestarbot.api.contact.User;
 import me.lanzhi.bluestarbot.api.event.BluestarBotEvent;
 import me.lanzhi.bluestarbot.api.event.MessageReceivedEvent;
 import me.lanzhi.bluestarbot.api.event.UserEvent;
+import me.lanzhi.bluestarbot.internal.Mapping;
 
+/**
+ * 接收到用户私聊消息
+ */
 public abstract class UserMessageEvent extends BluestarBotEvent implements UserEvent, MessageReceivedEvent
 {
     public UserMessageEvent(net.mamoe.mirai.event.events.UserMessageEvent event)

@@ -1,11 +1,14 @@
 package me.lanzhi.bluestarbot.api.event.group.setting;
 
-import me.lanzhi.bluestarbot.Mapping;
-import me.lanzhi.bluestarbot.api.Group;
-import me.lanzhi.bluestarbot.api.NormalGroupMember;
+import me.lanzhi.bluestarbot.api.contact.group.Group;
+import me.lanzhi.bluestarbot.api.contact.group.NormalGroupMember;
 import me.lanzhi.bluestarbot.api.event.BluestarBotEvent;
 import me.lanzhi.bluestarbot.api.event.GroupSettingChangeEvent;
+import me.lanzhi.bluestarbot.internal.Mapping;
 
+/**
+ * 允许邀请进群状态变化事件
+ */
 public final class GroupAllowMemberInviteEvent extends BluestarBotEvent implements GroupSettingChangeEvent
 {
     public GroupAllowMemberInviteEvent(net.mamoe.mirai.event.events.GroupAllowMemberInviteEvent event)
@@ -35,6 +38,9 @@ public final class GroupAllowMemberInviteEvent extends BluestarBotEvent implemen
         return getEvent().getOrigin();
     }
 
+    /**
+     * @return 操作人
+     */
     public NormalGroupMember getOperator()
     {
         return Mapping.map(getEvent().getOperator());

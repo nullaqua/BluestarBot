@@ -1,10 +1,13 @@
 package me.lanzhi.bluestarbot.api.event.friend;
 
-import me.lanzhi.bluestarbot.Mapping;
-import me.lanzhi.bluestarbot.api.Friend;
+import me.lanzhi.bluestarbot.api.contact.Friend;
 import me.lanzhi.bluestarbot.api.event.BluestarBotEvent;
 import me.lanzhi.bluestarbot.api.event.FriendEvent;
+import me.lanzhi.bluestarbot.internal.Mapping;
 
+/**
+ * 添加了一个好友
+ */
 public final class FriendAddEvent extends BluestarBotEvent implements FriendEvent
 {
     public FriendAddEvent(net.mamoe.mirai.event.events.FriendAddEvent event)
@@ -12,6 +15,11 @@ public final class FriendAddEvent extends BluestarBotEvent implements FriendEven
         super(event);
     }
 
+    /**
+     * 添加的好友
+     *
+     * @return 好友
+     */
     @Override
     public Friend getUser()
     {

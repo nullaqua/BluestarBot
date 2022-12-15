@@ -1,10 +1,10 @@
 package me.lanzhi.bluestarbot.api.event.group;
 
-import me.lanzhi.bluestarbot.Mapping;
-import me.lanzhi.bluestarbot.api.Group;
-import me.lanzhi.bluestarbot.api.MemberPermission;
+import me.lanzhi.bluestarbot.api.contact.group.Group;
+import me.lanzhi.bluestarbot.api.contact.group.MemberPermission;
 import me.lanzhi.bluestarbot.api.event.BluestarBotEvent;
 import me.lanzhi.bluestarbot.api.event.GroupEvent;
+import me.lanzhi.bluestarbot.internal.Mapping;
 
 public final class BotGroupPermissionChangeEvent extends BluestarBotEvent implements GroupEvent
 {

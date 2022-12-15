@@ -1,10 +1,12 @@
 package me.lanzhi.bluestarbot.api.event.message.postsend;
 
-import me.lanzhi.bluestarbot.Mapping;
-import me.lanzhi.bluestarbot.api.Friend;
+import me.lanzhi.bluestarbot.api.contact.Friend;
 import me.lanzhi.bluestarbot.api.event.FriendEvent;
-import net.mamoe.mirai.message.data.MessageSource;
+import me.lanzhi.bluestarbot.internal.Mapping;
 
+/**
+ * 向好友发送消息
+ */
 public final class FriendMessagePostSendEvent extends UserMessagePostSendEvent implements FriendEvent
 {
     public FriendMessagePostSendEvent(net.mamoe.mirai.event.events.FriendMessagePostSendEvent event)
@@ -22,12 +24,6 @@ public final class FriendMessagePostSendEvent extends UserMessagePostSendEvent i
     public Friend getContact()
     {
         return Mapping.map(getEvent().getTarget());
-    }
-
-    @Override
-    public void recall()
-    {
-        MessageSource.recall(getEvent().getMessage());
     }
 
     @Override

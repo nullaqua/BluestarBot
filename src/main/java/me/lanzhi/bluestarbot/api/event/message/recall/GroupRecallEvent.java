@@ -1,13 +1,16 @@
 package me.lanzhi.bluestarbot.api.event.message.recall;
 
-import me.lanzhi.bluestarbot.Mapping;
-import me.lanzhi.bluestarbot.api.Group;
-import me.lanzhi.bluestarbot.api.GroupMember;
-import me.lanzhi.bluestarbot.api.NormalGroupMember;
+import me.lanzhi.bluestarbot.api.contact.group.Group;
+import me.lanzhi.bluestarbot.api.contact.group.GroupMember;
+import me.lanzhi.bluestarbot.api.contact.group.NormalGroupMember;
 import me.lanzhi.bluestarbot.api.event.BluestarBotEvent;
 import me.lanzhi.bluestarbot.api.event.GroupMemberEvent;
 import me.lanzhi.bluestarbot.api.event.MessageRecallEvent;
+import me.lanzhi.bluestarbot.internal.Mapping;
 
+/**
+ * 群消息撤回
+ */
 public final class GroupRecallEvent extends BluestarBotEvent implements MessageRecallEvent, GroupMemberEvent
 {
     public GroupRecallEvent(net.mamoe.mirai.event.events.MessageRecallEvent.GroupRecall event)

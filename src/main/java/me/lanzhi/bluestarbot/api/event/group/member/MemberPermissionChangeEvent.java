@@ -1,11 +1,16 @@
 package me.lanzhi.bluestarbot.api.event.group.member;
 
-import me.lanzhi.bluestarbot.Mapping;
-import me.lanzhi.bluestarbot.api.MemberPermission;
-import me.lanzhi.bluestarbot.api.NormalGroupMember;
+import me.lanzhi.bluestarbot.api.contact.group.MemberPermission;
+import me.lanzhi.bluestarbot.api.contact.group.NormalGroupMember;
 import me.lanzhi.bluestarbot.api.event.BluestarBotEvent;
 import me.lanzhi.bluestarbot.api.event.GroupMemberEvent;
+import me.lanzhi.bluestarbot.internal.Mapping;
 
+/**
+ * 群成员权限修改事件
+ *
+ * @see MemberPermission 群员权限
+ */
 public final class MemberPermissionChangeEvent extends BluestarBotEvent implements GroupMemberEvent
 {
     public MemberPermissionChangeEvent(net.mamoe.mirai.event.events.MemberPermissionChangeEvent event)
