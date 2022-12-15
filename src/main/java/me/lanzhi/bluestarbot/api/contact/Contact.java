@@ -7,9 +7,8 @@ import me.lanzhi.bluestarbot.api.contact.group.GroupMember;
 import me.lanzhi.bluestarbot.api.contact.group.NormalGroupMember;
 import me.lanzhi.bluestarbot.api.message.Reply;
 import me.lanzhi.bluestarbot.internal.Mapping;
-import me.lanzhi.bluestarbot.internal.message.MessageChainImpl;
+import me.lanzhi.bluestarbot.internal.message.MessageImpl;
 import net.mamoe.mirai.contact.ContactOrBot;
-import net.mamoe.mirai.message.data.MessageChainBuilder;
 import net.mamoe.mirai.message.data.MessageSourceKind;
 import net.mamoe.mirai.message.data.MusicKind;
 import net.mamoe.mirai.message.data.MusicShare;
@@ -37,7 +36,7 @@ public abstract class Contact
     }
 
     /**
-     * 在此聊天频道中向一用户发送戳一戳
+     * 在此聊天频道中向一个用户发送戳一戳
      *
      * @param user 发送的对象
      * @return 成功为true
@@ -48,7 +47,7 @@ public abstract class Contact
     }
 
     /**
-     * 在此聊天频道中向一用户发送戳一戳
+     * 在此聊天频道中向一个用户发送戳一戳
      *
      * @param id 发送的对象的qqid
      * @return 成功为true
@@ -97,7 +96,7 @@ public abstract class Contact
 
     /**
      * @param message mirai代码
-     * @see Contact#sendMessage(me.lanzhi.bluestarbot.api.message.MessageChain) 建议的方法
+     * @see Contact#sendMessage(me.lanzhi.bluestarbot.api.message.Message) 建议的方法
      * @deprecated 以mirai码发送消息,不建议使用
      */
     @Deprecated
@@ -112,9 +111,9 @@ public abstract class Contact
      * @param message 消息
      * @see me.lanzhi.bluestarbot.api.message.Message 消息
      */
-    public final void sendMessage(me.lanzhi.bluestarbot.api.message.MessageChain message)
+    public final void sendMessage(me.lanzhi.bluestarbot.api.message.Message message)
     {
-        toContact.sendMessage(((MessageChainImpl) message).toMirai());
+        toContact.sendMessage(((MessageImpl) message).toMirai());
     }
 
     /**
@@ -125,17 +124,14 @@ public abstract class Contact
      * @see me.lanzhi.bluestarbot.api.message.Message 消息
      * @see Reply 回复
      */
-    public final void sendMessage(me.lanzhi.bluestarbot.api.message.MessageChain messages,Reply reply)
+    public final void sendMessage(me.lanzhi.bluestarbot.api.message.Message messages,Reply reply)
     {
         if (reply==null)
         {
             sendMessage(messages);
             return;
         }
-        MessageChainBuilder builder=new MessageChainBuilder();
-        builder.add(reply.toMirai(getBot(),this));
-        builder.add(((MessageChainImpl) messages).toMirai());
-        toContact.sendMessage(builder.build());
+        toContact.sendMessage(reply.toMirai(getBot(),this).plus(((MessageImpl) messages).toMirai()));
     }
 
     /**

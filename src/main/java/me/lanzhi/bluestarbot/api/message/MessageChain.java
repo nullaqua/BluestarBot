@@ -41,7 +41,10 @@ public interface MessageChain extends Message, Iterable<Message>
                     this.append(message1);
                 }
             }
-            list.add(message);
+            else
+            {
+                list.add(message);
+            }
             return this;
         }
 
