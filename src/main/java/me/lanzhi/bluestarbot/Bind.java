@@ -16,6 +16,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+/**
+ * 处理Minecraft-QQ绑定,属于内部类,勿动
+ */
 public final class Bind implements Serializable
 {
     private static final long serialVersionUID=0L;

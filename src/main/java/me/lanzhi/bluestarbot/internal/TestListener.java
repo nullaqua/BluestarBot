@@ -12,6 +12,9 @@ import org.bukkit.event.Listener;
 
 import static me.lanzhi.bluestarbot.internal.Utils.logger;
 
+/**
+ * 消息监听,发送日志
+ */
 public final class TestListener implements Listener
 {
     private final BluestarBotPlugin plugin;

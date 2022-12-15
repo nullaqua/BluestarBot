@@ -59,6 +59,9 @@ import java.util.function.Function;
 
 import static me.lanzhi.bluestarbot.internal.Utils.logger;
 
+/**
+ * 事件注册,验证处理
+ */
 public final class Manager
 {
     public final static List<Long> bots=new ArrayList<>();

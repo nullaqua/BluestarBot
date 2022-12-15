@@ -8,7 +8,7 @@ import me.lanzhi.bluestarbot.internal.TestListener;
 import me.lanzhi.bluestarbot.internal.Utils;
 import me.lanzhi.bluestarbot.internal.classloader.MiraiLoader;
 import me.lanzhi.bluestarbot.internal.classloader.URLClassLoaderAccess;
-import me.lanzhi.bluestarbot.internal.command.BluestarBotCommand;
+import me.lanzhi.bluestarbot.internal.BluestarBotCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -22,6 +22,9 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Consumer;
 
+/**
+ * 插件本体类,勿动
+ */
 public final class BluestarBotPlugin extends JavaPlugin
 {
     private final Set<Consumer<BluestarBotEvent>> listeners=new HashSet<>();
