@@ -75,24 +75,25 @@ public interface ForwardMessage extends Message, Iterable<ForwardMessage.Node>
     }
 
     /**
+     * 合并转发消息的渲染
      * |-------------------------|
-     * | <title>                 |
-     * | <preview>               |
+     * |  title                  |
+     * |  preview                |
      * |-------------------------|
-     * | <summary>               |
+     * |  summary                |
      * |-------------------------|
      * <p>
      * 默认显示方案:
      * |-------------------------|
      * | 群聊的聊天记录             |
-     * | <消息 1>                 |
-     * | <消息 2>                 |
-     * | <消息 3>                 |
+     * |  消息 1                  |
+     * |  消息 2                  |
+     * |  消息 3                  |
      * |-------------------------|
-     * | 查看3条转发消息          |
+     * | 查看3条转发消息           |
      * |-------------------------|
      */
-    interface Display
+    public static interface Display
     {
         Display DEFAULT=new Display()
         {

@@ -1,12 +1,17 @@
 package me.lanzhi.bluestarbot.internal;
 
 import me.lanzhi.bluestarbot.BluestarBotPlugin;
+import me.lanzhi.bluestarbot.api.BluestarBot;
+import me.lanzhi.bluestarbot.api.Bot;
+import me.lanzhi.bluestarbot.api.contact.Friend;
 import me.lanzhi.bluestarbot.api.contact.User;
 import me.lanzhi.bluestarbot.api.contact.group.Group;
 import me.lanzhi.bluestarbot.api.contact.group.GroupMember;
 import me.lanzhi.bluestarbot.api.event.BluestarBotEvent;
 import me.lanzhi.bluestarbot.api.event.MessageReceivedEvent;
+import me.lanzhi.bluestarbot.api.event.message.received.FriendMessageEvent;
 import me.lanzhi.bluestarbot.api.event.message.received.GroupMessageEvent;
+import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
