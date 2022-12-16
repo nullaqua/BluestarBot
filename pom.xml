@@ -89,8 +89,8 @@
                 </executions>
                 <configuration>
                     <additionalparam>-Xdoclint:none</additionalparam>
-                    <reportOutputDirectory>.</reportOutputDirectory>
-                    <destDir>docs</destDir>
+                    <reportOutputDirectory>./docs</reportOutputDirectory>
+                    <destDir>javadoc</destDir>
                 </configuration>
             </plugin>
             <plugin>

@@ -4,3 +4,4 @@ main: me.lanzhi.bluestarbot.BluestarBotPlugin
 api-version: 1.13
 commands:
   bluestarbot:
+    permission: bluestargame.command

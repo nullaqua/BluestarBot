@@ -172,7 +172,7 @@ public final class Manager
     {
         File imageFile=new File(JavaPlugin.getPlugin(BluestarBotPlugin.class).getDataFolder(),"verify-images");
         imageFile.mkdirs();
-        imageFile=new File(imageFile,bot.getId()+"-verify");
+        imageFile=new File(imageFile,bot.getId()+"-verify.png");
         try
         {
             imageFile.createNewFile();
