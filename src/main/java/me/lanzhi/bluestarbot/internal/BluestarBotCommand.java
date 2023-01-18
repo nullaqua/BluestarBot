@@ -3,6 +3,7 @@ package me.lanzhi.bluestarbot.internal;
 import me.lanzhi.bluestarbot.BluestarBotPlugin;
 import me.lanzhi.bluestarbot.api.BluestarBot;
 import me.lanzhi.bluestarbot.api.Bot;
+import me.lanzhi.bluestarbot.api.Internal;
 import me.lanzhi.bluestarbot.api.contact.Friend;
 import me.lanzhi.bluestarbot.api.contact.group.Group;
 import me.lanzhi.bluestarbot.api.contact.group.NormalGroupMember;
@@ -25,6 +26,7 @@ import java.util.function.Consumer;
 /**
  * 插件指令处理类
  */
+@Internal
 public final class BluestarBotCommand implements CommandExecutor, TabExecutor
 {
     private final BluestarBotPlugin plugin;

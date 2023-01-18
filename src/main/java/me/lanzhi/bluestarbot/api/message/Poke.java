@@ -1,5 +1,6 @@
 package me.lanzhi.bluestarbot.api.message;
 
+import me.lanzhi.bluestarbot.api.Internal;
 import me.lanzhi.bluestarbot.api.contact.Contact;
 import me.lanzhi.bluestarbot.api.contact.User;
 import me.lanzhi.bluestarbot.internal.message.MessageImpl;
@@ -56,6 +57,7 @@ public enum Poke implements MessageImpl, Message
         return map.get(pokeMessage);
     }
 
+    @Internal
     @Override
     public net.mamoe.mirai.message.data.Message toMirai()
     {

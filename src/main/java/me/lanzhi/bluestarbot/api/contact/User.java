@@ -1,5 +1,6 @@
 package me.lanzhi.bluestarbot.api.contact;
 
+import me.lanzhi.bluestarbot.api.Internal;
 import me.lanzhi.bluestarbot.internal.Mapping;
 import net.mamoe.mirai.contact.UserOrBot;
 
@@ -12,11 +13,12 @@ import java.util.Objects;
  */
 public abstract class User extends Contact
 {
+    @Internal
     protected User(UserOrBot contact)
     {
         super(contact);
     }
-
+    @Internal
     public UserOrBot getUser()
     {
         return (UserOrBot) super.getContact();
@@ -24,7 +26,6 @@ public abstract class User extends Contact
 
     /**
      * 备注
-     *
      * @return 备注
      */
     public final String getRemark()

@@ -1,5 +1,6 @@
 package me.lanzhi.bluestarbot.api.event.message.postsend;
 
+import me.lanzhi.bluestarbot.api.Internal;
 import me.lanzhi.bluestarbot.api.contact.group.NormalGroupMember;
 import me.lanzhi.bluestarbot.api.event.GroupMemberEvent;
 import me.lanzhi.bluestarbot.internal.Mapping;
@@ -9,11 +10,13 @@ import me.lanzhi.bluestarbot.internal.Mapping;
  */
 public final class GroupTempMessagePostSendEvent extends UserMessagePostSendEvent implements GroupMemberEvent
 {
+    @Internal
     public GroupTempMessagePostSendEvent(net.mamoe.mirai.event.events.GroupTempMessagePostSendEvent event)
     {
         super(event);
     }
 
+    @Internal
     @Override
     public net.mamoe.mirai.event.events.GroupTempMessagePostSendEvent getEvent()
     {

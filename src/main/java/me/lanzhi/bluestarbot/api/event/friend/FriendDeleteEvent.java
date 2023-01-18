@@ -1,5 +1,6 @@
 package me.lanzhi.bluestarbot.api.event.friend;
 
+import me.lanzhi.bluestarbot.api.Internal;
 import me.lanzhi.bluestarbot.api.contact.Friend;
 import me.lanzhi.bluestarbot.api.event.BluestarBotEvent;
 import me.lanzhi.bluestarbot.api.event.FriendEvent;
@@ -10,6 +11,7 @@ import me.lanzhi.bluestarbot.internal.Mapping;
  */
 public final class FriendDeleteEvent extends BluestarBotEvent implements FriendEvent
 {
+    @Internal
     public FriendDeleteEvent(net.mamoe.mirai.event.events.FriendDeleteEvent event)
     {
         super(event);
@@ -26,6 +28,7 @@ public final class FriendDeleteEvent extends BluestarBotEvent implements FriendE
         return Mapping.map(getEvent().getFriend());
     }
 
+    @Internal
     @Override
     public net.mamoe.mirai.event.events.FriendDeleteEvent getEvent()
     {

@@ -1,6 +1,7 @@
 package me.lanzhi.bluestarbot.internal;
 
 import me.lanzhi.bluestarbot.api.Bot;
+import me.lanzhi.bluestarbot.api.Internal;
 import me.lanzhi.bluestarbot.api.contact.Contact;
 import me.lanzhi.bluestarbot.api.contact.Friend;
 import me.lanzhi.bluestarbot.api.contact.OtherClient;
@@ -28,6 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
+@Internal
 public final class Mapping
 {
     private Mapping()

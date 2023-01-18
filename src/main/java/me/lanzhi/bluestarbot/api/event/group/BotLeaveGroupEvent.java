@@ -1,5 +1,6 @@
 package me.lanzhi.bluestarbot.api.event.group;
 
+import me.lanzhi.bluestarbot.api.Internal;
 import me.lanzhi.bluestarbot.api.contact.group.Group;
 import me.lanzhi.bluestarbot.api.event.BluestarBotEvent;
 import me.lanzhi.bluestarbot.api.event.GroupEvent;
@@ -11,6 +12,7 @@ import net.mamoe.mirai.event.events.BotLeaveEvent;
  */
 public final class BotLeaveGroupEvent extends BluestarBotEvent implements GroupEvent
 {
+    @Internal
     public BotLeaveGroupEvent(BotLeaveEvent event)
     {
         super(event);
@@ -37,6 +39,7 @@ public final class BotLeaveGroupEvent extends BluestarBotEvent implements GroupE
         return Type.UNKNOWN;
     }
 
+    @Internal
     @Override
     public BotLeaveEvent getEvent()
     {

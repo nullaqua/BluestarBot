@@ -1,5 +1,6 @@
 package me.lanzhi.bluestarbot.api.message;
 
+import me.lanzhi.bluestarbot.api.Internal;
 import me.lanzhi.bluestarbot.internal.message.MusicShareImpl;
 
 import java.util.HashMap;
@@ -110,18 +111,22 @@ public interface MusicShare extends Message
             }
         }
 
+        @Internal
         private final net.mamoe.mirai.message.data.MusicKind musicKind;
 
+        @Internal
         MusicKind(net.mamoe.mirai.message.data.MusicKind musicKind)
         {
             this.musicKind=musicKind;
         }
 
+        @Internal
         public static MusicKind map(net.mamoe.mirai.message.data.MusicKind musicKind)
         {
             return map.get(musicKind);
         }
 
+        @Internal
         public net.mamoe.mirai.message.data.MusicKind getMusicKind()
         {
             return musicKind;

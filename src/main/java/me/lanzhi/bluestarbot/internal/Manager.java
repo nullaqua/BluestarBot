@@ -6,6 +6,7 @@ import kotlin.coroutines.jvm.internal.ContinuationImpl;
 import me.lanzhi.api.Bluestar;
 import me.lanzhi.bluestarbot.BluestarBotPlugin;
 import me.lanzhi.bluestarbot.api.Bot;
+import me.lanzhi.bluestarbot.api.Internal;
 import me.lanzhi.bluestarbot.api.event.BluestarBotEvent;
 import me.lanzhi.bluestarbot.api.event.bot.*;
 import me.lanzhi.bluestarbot.api.event.friend.*;
@@ -33,7 +34,6 @@ import me.lanzhi.bluestarbot.api.event.message.presend.StrangerMessagePreSendEve
 import me.lanzhi.bluestarbot.api.event.message.recall.FriendRecallEvent;
 import me.lanzhi.bluestarbot.api.event.message.recall.GroupRecallEvent;
 import me.lanzhi.bluestarbot.api.event.message.received.*;
-import me.lanzhi.bluestarbot.internal.classloader.MiraiLoader;
 import net.mamoe.mirai.event.CancellableEvent;
 import net.mamoe.mirai.event.Event;
 import net.mamoe.mirai.event.GlobalEventChannel;
@@ -57,11 +57,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-import static me.lanzhi.bluestarbot.internal.Utils.logger;
-
 /**
  * 事件注册,验证处理
  */
+@Internal
 public final class Manager
 {
     public final static List<Long> bots=new ArrayList<>();
@@ -132,8 +131,8 @@ public final class Manager
                     @Override
                     public Object invokeSuspend(@NotNull Object o)
                     {
-                        ResultKt.throwOnFailure(o);
                         s[0]=false;
+                        ResultKt.throwOnFailure(o);
                         return null;
                     }
                 };
@@ -146,11 +145,11 @@ public final class Manager
             {
                 break SmsTry;
             }
-            logger().warning("当前登录的QQ（"+bot.getId()+"）需要短信验证码");
-            logger().warning("验证码已发送到");
-            logger().warning(smsRequest.getCountryCode()+" "+smsRequest.getPhoneNumber());
-            logger().warning("验证完成后，请输入指令 /bluestarbot verify "+bot.getId()+" <验证码>");
-            logger().warning("如需取消登录，请输入指令 /bluestarbot cancel "+bot.getId());
+            Utils.logger().warning("当前登录的QQ（"+bot.getId()+"）需要短信验证码");
+            Utils.logger().warning("验证码已发送到");
+            Utils.logger().warning(smsRequest.getCountryCode()+" "+smsRequest.getPhoneNumber());
+            Utils.logger().warning("验证完成后，请输入指令 /bluestarbot verify "+bot.getId()+" <验证码>");
+            Utils.logger().warning("如需取消登录，请输入指令 /bluestarbot cancel "+bot.getId());
             return getRes(bot);
         }
         SliderTry:
@@ -162,7 +161,7 @@ public final class Manager
             onSolveUnsafeDeviceLoginVerify(bot,requests.getFallback().getUrl(),$completion);
             return requests.getFallback().solved();
         }
-        logger().severe("qq要求设备锁验证,但未给出可用验证方式可尝试稍后再试");
+        Utils.logger().severe("qq要求设备锁验证,但未给出可用验证方式可尝试稍后再试");
         throw new AssertionError();
     }
 
@@ -179,7 +178,7 @@ public final class Manager
         }
         catch (IOException e)
         {
-            logger().warning("QQ机器人: "+bot.getId()+"在进行登录验证时图片保存失败,原因: "+e);
+            Utils.logger().warning("QQ机器人: "+bot.getId()+"在进行登录验证时图片保存失败,原因: "+e);
             throw new CustomLoginFailedException(true,"无法保存验证图片")
             {
             };
@@ -192,17 +191,17 @@ public final class Manager
         }
         catch (Exception e)
         {
-            logger().warning("QQ机器人: "+bot.getId()+"在进行登录验证时图片保存失败,原因: "+e);
+            Utils.logger().warning("QQ机器人: "+bot.getId()+"在进行登录验证时图片保存失败,原因: "+e);
             throw new CustomLoginFailedException(true,"无法保存验证图片")
             {
             };
         }
 
-        logger().warning("当前登录的QQ（"+bot.getId()+"）需要文字验证码验证");
-        logger().warning("请找到下面的文件并识别文字验证码");
-        logger().warning(imageFile.getPath());
-        logger().warning("识别完成后，请输入指令 /bluestarbot verify "+bot.getId()+" <验证码>");
-        logger().warning("如需取消登录，请输入指令 /bluestarbot cancel "+bot.getId());
+        Utils.logger().warning("当前登录的QQ（"+bot.getId()+"）需要文字验证码验证");
+        Utils.logger().warning("请找到下面的文件并识别文字验证码");
+        Utils.logger().warning(imageFile.getPath());
+        Utils.logger().warning("识别完成后，请输入指令 /bluestarbot verify "+bot.getId()+" <验证码>");
+        Utils.logger().warning("如需取消登录，请输入指令 /bluestarbot cancel "+bot.getId());
 
         return getRes(bot);
     }
@@ -211,11 +210,11 @@ public final class Manager
     public static Object onSolveSliderCaptcha(@NotNull Bot bot,@NotNull String s,
                                               @NotNull Continuation<? super String> continuation)
     {
-        logger().warning("当前登录的QQ（"+bot.getId()+"）需要滑动验证码验证");
-        logger().warning("请打开以下链接进行验证");
-        logger().warning(s);
-        logger().warning("验证完成后，请输入指令 /bluestarbot verify "+bot.getId()+" <ticket>");
-        logger().warning("如需取消登录，请输入指令 /bluestarbot cancel "+bot.getId());
+        Utils.logger().warning("当前登录的QQ（"+bot.getId()+"）需要滑动验证码验证");
+        Utils.logger().warning("请打开以下链接进行验证");
+        Utils.logger().warning(s);
+        Utils.logger().warning("验证完成后，请输入指令 /bluestarbot verify "+bot.getId()+" <ticket>");
+        Utils.logger().warning("如需取消登录，请输入指令 /bluestarbot cancel "+bot.getId());
 
         return getRes(bot);
     }
@@ -224,11 +223,11 @@ public final class Manager
     public static Object onSolveUnsafeDeviceLoginVerify(@NotNull Bot bot,@NotNull String s,@NotNull Continuation<?
             super String> continuation)
     {
-        logger().warning("当前登录的QQ（"+bot.getId()+"）需要设备锁验证");
-        logger().warning("请打开以下链接进行验证");
-        logger().warning(s);
-        logger().warning("验证完成后，请输入指令 /bluestarbot verify "+bot.getId());
-        logger().warning("如需取消登录，请输入指令 /bluestarbot cancel "+bot.getId());
+        Utils.logger().warning("当前登录的QQ（"+bot.getId()+"）需要设备锁验证");
+        Utils.logger().warning("请打开以下链接进行验证");
+        Utils.logger().warning(s);
+        Utils.logger().warning("验证完成后，请输入指令 /bluestarbot verify "+bot.getId());
+        Utils.logger().warning("如需取消登录，请输入指令 /bluestarbot cancel "+bot.getId());
 
         return getRes(bot);
     }
@@ -252,7 +251,7 @@ public final class Manager
         }
         catch (Exception e)
         {
-            logger().warning("QQ机器人: "+bot.getId()+"创建登录线程时失败,原因: "+e);
+            Utils.logger().warning("QQ机器人: "+bot.getId()+"创建登录线程时失败,原因: "+e);
             throw new CustomLoginFailedException(true,"无法创建登录线程")
             {
             };
@@ -275,7 +274,7 @@ public final class Manager
 
     public static void registerEvents()
     {
-        Thread.currentThread().setContextClassLoader(MiraiLoader.classLoaderAccess().getClassLoader());
+        Thread.currentThread().setContextClassLoader(Utils.classLoaderAccessor().classLoader());
         //bot
         add(net.mamoe.mirai.event.events.BotAvatarChangedEvent.class,BotAvatarChangedEvent::new);
         add(net.mamoe.mirai.event.events.BotNickChangedEvent.class,BotNickChangedEvent::new);

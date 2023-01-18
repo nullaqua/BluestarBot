@@ -1,5 +1,6 @@
 package me.lanzhi.bluestarbot.internal.message;
 
+import me.lanzhi.bluestarbot.api.Internal;
 import me.lanzhi.bluestarbot.api.contact.Contact;
 import me.lanzhi.bluestarbot.api.message.ForwardMessage;
 import me.lanzhi.bluestarbot.internal.Mapping;
@@ -14,6 +15,7 @@ import java.util.List;
 
 import static me.lanzhi.bluestarbot.api.message.ForwardMessage.Display.DEFAULT;
 
+@Internal
 public final class ForwardMessageImpl implements MessageImpl, ForwardMessage
 {
     private final Display display;

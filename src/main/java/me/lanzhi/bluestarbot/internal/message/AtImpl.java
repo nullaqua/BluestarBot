@@ -1,10 +1,12 @@
 package me.lanzhi.bluestarbot.internal.message;
 
+import me.lanzhi.bluestarbot.api.Internal;
 import me.lanzhi.bluestarbot.api.contact.Contact;
 import me.lanzhi.bluestarbot.api.contact.User;
 import me.lanzhi.bluestarbot.api.message.At;
 import net.mamoe.mirai.message.data.AtAll;
 
+@Internal
 public final class AtImpl implements MessageImpl, At
 {
     public final static MessageImpl AT_ALL=()->AtAll.INSTANCE;

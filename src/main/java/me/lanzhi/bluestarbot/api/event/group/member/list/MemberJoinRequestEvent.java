@@ -1,5 +1,6 @@
 package me.lanzhi.bluestarbot.api.event.group.member.list;
 
+import me.lanzhi.bluestarbot.api.Internal;
 import me.lanzhi.bluestarbot.api.contact.group.Group;
 import me.lanzhi.bluestarbot.api.contact.group.NormalGroupMember;
 import me.lanzhi.bluestarbot.api.event.BluestarBotEvent;
@@ -13,6 +14,7 @@ import me.lanzhi.bluestarbot.internal.Mapping;
  */
 public final class MemberJoinRequestEvent extends BluestarBotEvent implements GroupEvent
 {
+    @Internal
     public MemberJoinRequestEvent(net.mamoe.mirai.event.events.MemberJoinRequestEvent event)
     {
         super(event);
@@ -27,6 +29,7 @@ public final class MemberJoinRequestEvent extends BluestarBotEvent implements Gr
         return Mapping.map(getEvent().getGroup());
     }
 
+    @Internal
     @Override
     public net.mamoe.mirai.event.events.MemberJoinRequestEvent getEvent()
     {

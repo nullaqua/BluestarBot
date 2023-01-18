@@ -1,5 +1,6 @@
 package me.lanzhi.bluestarbot.api.contact.group;
 
+import me.lanzhi.bluestarbot.api.Internal;
 import me.lanzhi.bluestarbot.api.contact.Contact;
 import me.lanzhi.bluestarbot.api.contact.SendAudioAble;
 import me.lanzhi.bluestarbot.api.contact.User;
@@ -18,11 +19,13 @@ import java.util.List;
  */
 public final class Group extends Contact implements SendAudioAble
 {
+    @Internal
     public Group(net.mamoe.mirai.contact.Group group)
     {
         super(group);
     }
 
+    @Internal
     public net.mamoe.mirai.contact.Group getGroup()
     {
         return (net.mamoe.mirai.contact.Group) super.getContact();
@@ -33,7 +36,7 @@ public final class Group extends Contact implements SendAudioAble
      *
      * @param id 发送对象
      * @return 若群内存在此人,且发送成功返回true,否则返回false
-     * @see me.lanzhi.bluestarbot.api.event.message.NudgeEvent
+     * @see me.lanzhi.bluestarbot.api.event.message.NudgeEvent 戳一戳事件
      */
     @Override
     public boolean nudge(long id)
@@ -47,7 +50,7 @@ public final class Group extends Contact implements SendAudioAble
     }
 
     /**
-     * @see Group#getMember(long)
+     * 与 {@link #getMember(long)} 相同
      */
     @Override
     public NormalGroupMember getUser(long id)
@@ -108,7 +111,7 @@ public final class Group extends Contact implements SendAudioAble
     /**
      * 获取群主,以群员形式返回
      *
-     * @return 群主
+     * @return 此群聊的群主
      */
     public NormalGroupMember getOwner()
     {
@@ -117,7 +120,7 @@ public final class Group extends Contact implements SendAudioAble
 
     /**
      * 群内是否有某人,用户类型无所谓,仅匹配ID
-     *
+     * 与{@link #containsMember(long)}结果相同
      * @param user 用户
      * @return 若有则返回true,否则返回false
      */
@@ -158,7 +161,7 @@ public final class Group extends Contact implements SendAudioAble
      * 获取群设置
      *
      * @return 群设置
-     * @see GroupSetting
+     * @see GroupSetting 群聊设置
      */
     public GroupSetting getSetting()
     {

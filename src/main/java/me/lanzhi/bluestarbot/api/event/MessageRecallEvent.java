@@ -1,6 +1,7 @@
 package me.lanzhi.bluestarbot.api.event;
 
 import me.lanzhi.bluestarbot.api.Bot;
+import me.lanzhi.bluestarbot.api.Internal;
 import me.lanzhi.bluestarbot.api.contact.User;
 import me.lanzhi.bluestarbot.internal.Mapping;
 
@@ -11,6 +12,7 @@ import java.util.Date;
  */
 public interface MessageRecallEvent
 {
+    @Internal
     public net.mamoe.mirai.event.events.MessageRecallEvent getEvent();
 
     /**

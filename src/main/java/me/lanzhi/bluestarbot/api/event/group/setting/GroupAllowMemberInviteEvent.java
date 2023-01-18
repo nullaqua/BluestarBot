@@ -1,5 +1,6 @@
 package me.lanzhi.bluestarbot.api.event.group.setting;
 
+import me.lanzhi.bluestarbot.api.Internal;
 import me.lanzhi.bluestarbot.api.contact.group.Group;
 import me.lanzhi.bluestarbot.api.contact.group.NormalGroupMember;
 import me.lanzhi.bluestarbot.api.event.BluestarBotEvent;
@@ -11,11 +12,13 @@ import me.lanzhi.bluestarbot.internal.Mapping;
  */
 public final class GroupAllowMemberInviteEvent extends BluestarBotEvent implements GroupSettingChangeEvent
 {
+    @Internal
     public GroupAllowMemberInviteEvent(net.mamoe.mirai.event.events.GroupAllowMemberInviteEvent event)
     {
         super(event);
     }
 
+    @Internal
     @Override
     public net.mamoe.mirai.event.events.GroupAllowMemberInviteEvent getEvent()
     {

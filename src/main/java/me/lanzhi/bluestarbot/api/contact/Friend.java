@@ -1,5 +1,6 @@
 package me.lanzhi.bluestarbot.api.contact;
 
+import me.lanzhi.bluestarbot.api.Internal;
 import net.mamoe.mirai.contact.AudioSupported;
 
 /**
@@ -9,6 +10,7 @@ import net.mamoe.mirai.contact.AudioSupported;
  */
 public final class Friend extends User implements SendAudioAble
 {
+    @Internal
     public Friend(net.mamoe.mirai.contact.Friend friend)
     {
         super(friend);
@@ -33,7 +35,7 @@ public final class Friend extends User implements SendAudioAble
     {
         getFriend().delete();
     }
-
+    @Internal
     public net.mamoe.mirai.contact.Friend getFriend()
     {
         return (net.mamoe.mirai.contact.Friend) super.getUser();

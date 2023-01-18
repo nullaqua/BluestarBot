@@ -1,5 +1,6 @@
 package me.lanzhi.bluestarbot.api.contact.group;
 
+import me.lanzhi.bluestarbot.api.Internal;
 import me.lanzhi.bluestarbot.api.contact.Contact;
 import net.mamoe.mirai.contact.AnonymousMember;
 
@@ -8,9 +9,16 @@ import net.mamoe.mirai.contact.AnonymousMember;
  */
 public final class AnonymousGroupMember extends GroupMember
 {
+    @Internal
     public AnonymousGroupMember(AnonymousMember member)
     {
         super(member);
+    }
+
+    @Internal
+    public AnonymousMember getMember()
+    {
+        return (AnonymousMember) super.getMember();
     }
 
     @Override

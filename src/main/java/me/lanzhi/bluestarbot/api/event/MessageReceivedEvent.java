@@ -29,7 +29,7 @@ public interface MessageReceivedEvent
      *
      * @param message 消息
      */
-    public default void reply(MessageChain message)
+    public default void reply(Message message)
     {
         getContact().sendMessage(message,new Reply(this));
     }
@@ -54,10 +54,9 @@ public interface MessageReceivedEvent
 
     /**
      * @return mirai码样式的消息
-     * @see MessageReceivedEvent#getMessage() 建议使用的方法
-     * @deprecated
+     * @deprecated 不建议通过Mirai码处理,建议使用 {@link #getMessage()} 进行处理
      */
-    @Deprecated
+    @Deprecated(since="1.4.0")
     public default String getMessageAsCode()
     {
         return getEvent().getMessage().serializeToMiraiCode();
@@ -83,16 +82,27 @@ public interface MessageReceivedEvent
      * 创建一个对此消息的回复
      *
      * @return 创建的回复
-     * @see Contact#sendMessage(MessageChain,Reply) 可通过此方法发送
+     * @see Contact#sendMessage(Message,Reply) 可通过此方法发送
      */
-    public default Reply getMessageReply()
+    public default Reply createReply()
+    {
+        return new Reply(this);
+    }
+
+    /**
+     * 获取此消息回复的内容
+     */
+    public default Reply getReply()
     {
         QuoteReply reply=getEvent().getMessage().get(QuoteReply.Key);
         if (reply==null)
         {
             return null;
         }
-        return new Reply(reply);
+        else
+        {
+            return new Reply(reply);
+        }
     }
 
     /**

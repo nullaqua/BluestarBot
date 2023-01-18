@@ -1,5 +1,6 @@
 package me.lanzhi.bluestarbot.api.event.message;
 
+import me.lanzhi.bluestarbot.api.Internal;
 import me.lanzhi.bluestarbot.api.contact.Contact;
 import me.lanzhi.bluestarbot.api.event.BluestarBotEvent;
 import me.lanzhi.bluestarbot.internal.Mapping;
@@ -11,11 +12,13 @@ import java.io.InputStream;
  */
 public final class ImageUploadEvent extends BluestarBotEvent
 {
+    @Internal
     public ImageUploadEvent(net.mamoe.mirai.event.events.ImageUploadEvent event)
     {
         super(event);
     }
 
+    @Internal
     @Override
     public net.mamoe.mirai.event.events.BeforeImageUploadEvent getEvent()
     {

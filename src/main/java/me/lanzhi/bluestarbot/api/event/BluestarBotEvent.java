@@ -1,6 +1,7 @@
 package me.lanzhi.bluestarbot.api.event;
 
 import me.lanzhi.bluestarbot.api.Bot;
+import me.lanzhi.bluestarbot.api.Internal;
 import me.lanzhi.bluestarbot.internal.Mapping;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
@@ -15,25 +16,30 @@ public abstract class BluestarBotEvent extends Event implements Cancellable
     private final net.mamoe.mirai.event.events.BotEvent event;
     private boolean cancel=false;
 
+    @Internal
     public net.mamoe.mirai.event.events.BotEvent getEvent()
     {
         return event;
     }
 
+    @Internal
     public BluestarBotEvent(net.mamoe.mirai.event.events.BotEvent event)
     {
         super(true);
         this.event=event;
     }
 
+    @Internal
     @Override
     public final HandlerList getHandlers()
     {
         return handlerList;
     }
 
+    @Internal
     public static HandlerList handlerList=new HandlerList();
 
+    @Internal
     public static HandlerList getHandlerList()
     {
         return handlerList;

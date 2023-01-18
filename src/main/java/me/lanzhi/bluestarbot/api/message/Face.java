@@ -1,5 +1,6 @@
 package me.lanzhi.bluestarbot.api.message;
 
+import me.lanzhi.bluestarbot.api.Internal;
 import me.lanzhi.bluestarbot.internal.message.MessageImpl;
 
 /**
@@ -288,6 +289,7 @@ public enum Face implements MessageImpl
         return id;
     }
 
+    @Internal
     @Override
     public net.mamoe.mirai.message.data.Face toMirai()
     {

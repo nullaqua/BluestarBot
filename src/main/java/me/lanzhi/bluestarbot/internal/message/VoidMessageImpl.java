@@ -1,10 +1,12 @@
 package me.lanzhi.bluestarbot.internal.message;
 
+import me.lanzhi.bluestarbot.api.Internal;
 import me.lanzhi.bluestarbot.api.message.VoidMessage;
 import net.mamoe.mirai.message.data.LightApp;
 import net.mamoe.mirai.message.data.Message;
 import net.mamoe.mirai.message.data.ServiceMessage;
 
+@Internal
 public class VoidMessageImpl implements VoidMessage, MessageImpl
 {
     private final Message message;

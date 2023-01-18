@@ -1,5 +1,6 @@
 package me.lanzhi.bluestarbot.internal.message;
 
+import me.lanzhi.bluestarbot.api.Internal;
 import me.lanzhi.bluestarbot.api.contact.SendAudioAble;
 import me.lanzhi.bluestarbot.api.message.Audio;
 import net.mamoe.mirai.message.data.OfflineAudio;
@@ -10,6 +11,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
+@Internal
 public abstract class AudioImpl implements Audio, MessageImpl
 {
     public static AudioImpl create(File file,SendAudioAble sendAudioAble)
@@ -48,6 +50,7 @@ public abstract class AudioImpl implements Audio, MessageImpl
     @Override
     public abstract net.mamoe.mirai.message.data.Audio toMirai();
 
+    @Internal
     private static final class Custom extends AudioImpl
     {
         private final ExternalResource resource;
@@ -84,6 +87,7 @@ public abstract class AudioImpl implements Audio, MessageImpl
         }
     }
 
+    @Internal
     private static final class FromMirai extends AudioImpl
     {
         private final OnlineAudio onlineAudio;

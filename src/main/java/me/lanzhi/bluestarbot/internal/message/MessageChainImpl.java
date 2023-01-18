@@ -1,5 +1,6 @@
 package me.lanzhi.bluestarbot.internal.message;
 
+import me.lanzhi.bluestarbot.api.Internal;
 import me.lanzhi.bluestarbot.api.contact.Contact;
 import me.lanzhi.bluestarbot.api.message.Message;
 import me.lanzhi.bluestarbot.api.message.MessageChain;
@@ -9,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Iterator;
 import java.util.List;
 
+@Internal
 public class MessageChainImpl implements MessageChain, MessageImpl
 {
     private final List<Message> list;

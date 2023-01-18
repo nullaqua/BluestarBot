@@ -1,5 +1,6 @@
 package me.lanzhi.bluestarbot.api.event.message.recall;
 
+import me.lanzhi.bluestarbot.api.Internal;
 import me.lanzhi.bluestarbot.api.contact.Friend;
 import me.lanzhi.bluestarbot.api.event.BluestarBotEvent;
 import me.lanzhi.bluestarbot.api.event.FriendEvent;
@@ -11,6 +12,7 @@ import me.lanzhi.bluestarbot.internal.Mapping;
  */
 public final class FriendRecallEvent extends BluestarBotEvent implements MessageRecallEvent, FriendEvent
 {
+    @Internal
     public FriendRecallEvent(net.mamoe.mirai.event.events.MessageRecallEvent.FriendRecall event)
     {
         super(event);
@@ -28,6 +30,7 @@ public final class FriendRecallEvent extends BluestarBotEvent implements Message
         return Mapping.map(getEvent().getAuthor());
     }
 
+    @Internal
     @Override
     public net.mamoe.mirai.event.events.MessageRecallEvent.FriendRecall getEvent()
     {

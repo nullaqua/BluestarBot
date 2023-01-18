@@ -1,5 +1,6 @@
 package me.lanzhi.bluestarbot.api.event.bot;
 
+import me.lanzhi.bluestarbot.api.Internal;
 import me.lanzhi.bluestarbot.api.event.BluestarBotEvent;
 import me.lanzhi.bluestarbot.api.event.BotEvent;
 import org.jetbrains.annotations.Nullable;
@@ -10,6 +11,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public final class BotOfflineEvent extends BluestarBotEvent implements BotEvent
 {
+    @Internal
     public BotOfflineEvent(net.mamoe.mirai.event.events.BotOfflineEvent event)
     {
         super(event);
@@ -61,6 +63,7 @@ public final class BotOfflineEvent extends BluestarBotEvent implements BotEvent
         return null;
     }
 
+    @Internal
     @Override
     public net.mamoe.mirai.event.events.BotOfflineEvent getEvent()
     {

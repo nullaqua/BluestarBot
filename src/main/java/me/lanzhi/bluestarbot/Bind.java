@@ -2,6 +2,7 @@ package me.lanzhi.bluestarbot;
 
 import me.lanzhi.api.player.gui.GuiItem;
 import me.lanzhi.api.player.gui.PageGui;
+import me.lanzhi.bluestarbot.api.Internal;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -19,6 +20,7 @@ import java.util.UUID;
 /**
  * 处理Minecraft-QQ绑定,属于内部类,勿动
  */
+@Internal
 public final class Bind implements Serializable
 {
     private static final long serialVersionUID=0L;
@@ -31,49 +33,107 @@ public final class Bind implements Serializable
 
     public void addBind(UUID uuid,long id)
     {
-        if (uuid==null)
+        try
         {
-            return;
+            if (uuid==null)
+            {
+                return;
+            }
+            binds.put(uuid,id);
         }
-        binds.put(uuid,id);
+        finally
+        {
+            save();
+        }
     }
 
     public UUID getBind(long id)
     {
-        for (Map.Entry<UUID,Long> entry: binds.entrySet())
+        try
         {
-            if (entry.getValue()==id)
+            for (Map.Entry<UUID,Long> entry: binds.entrySet())
             {
-                return entry.getKey();
+                if (entry.getValue()==id)
+                {
+                    return entry.getKey();
+                }
             }
+            return null;
         }
-        return null;
+        finally
+        {
+            save();
+        }
     }
 
     public Long getBind(UUID uuid)
     {
-        if (uuid==null)
+        try
         {
-            return null;
+            if (uuid==null)
+            {
+                return null;
+            }
+            return binds.get(uuid);
         }
-        return binds.get(uuid);
+        finally
+        {
+            save();
+        }
     }
 
     public Long removeBind(UUID uuid)
     {
-        return binds.remove(uuid);
+        try
+        {
+            return binds.remove(uuid);
+        }
+        finally
+        {
+            save();
+        }
     }
 
     public UUID removeBind(long id)
     {
-        UUID uuid=getBind(id);
-        binds.values().remove(id);
-        return uuid;
+        try
+        {
+            UUID uuid=getBind(id);
+            binds.values().remove(id);
+            return uuid;
+        }
+        finally
+        {
+            save();
+        }
     }
 
+    /**
+     * 保存
+     */
+    public void save()
+    {
+        try
+        {
+            BluestarBotPlugin.getInstance().saveBinds();
+        }
+        catch (Exception e)
+        {
+        }
+    }
+
+    public static Bind getInstance()
+    {
+        return BluestarBotPlugin.getInstance().getBind();
+    }
+
+    /**
+     * 创建一个绑定编辑器的GUI
+     * @return 创建的GUI
+     */
     public PageGui.Builder getGui()
     {
-        PageGui.Builder builder=PageGui.builder();
+        PageGui.Builder builder=PageGui.builder(JavaPlugin.getProvidingPlugin(getClass()));
         int id=0;
         for (Map.Entry<UUID,Long> e: binds.entrySet())
         {

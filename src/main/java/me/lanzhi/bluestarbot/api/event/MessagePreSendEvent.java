@@ -1,6 +1,7 @@
 package me.lanzhi.bluestarbot.api.event;
 
 import me.lanzhi.bluestarbot.api.Bot;
+import me.lanzhi.bluestarbot.api.Internal;
 import me.lanzhi.bluestarbot.api.contact.Contact;
 import me.lanzhi.bluestarbot.api.message.MessageChain;
 import me.lanzhi.bluestarbot.internal.Mapping;
@@ -14,8 +15,7 @@ public interface MessagePreSendEvent extends Cancellable
 {
     /**
      * @return mirai码样式的消息
-     * @see MessagePreSendEvent#getMessage() 建议使用的方法
-     * @deprecated
+     * @deprecated 建议使用 {@link #getMessage()} 进行处理
      */
     @Deprecated
     public default String getMessageAsCode()
@@ -23,6 +23,7 @@ public interface MessagePreSendEvent extends Cancellable
         return getEvent().getMessage().toString();
     }
 
+    @Internal
     public net.mamoe.mirai.event.events.MessagePreSendEvent getEvent();
 
     /**

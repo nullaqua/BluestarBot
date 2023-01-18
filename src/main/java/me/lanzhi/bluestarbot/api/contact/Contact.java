@@ -1,10 +1,12 @@
 package me.lanzhi.bluestarbot.api.contact;
 
 import me.lanzhi.bluestarbot.api.Bot;
+import me.lanzhi.bluestarbot.api.Internal;
 import me.lanzhi.bluestarbot.api.contact.group.AnonymousGroupMember;
 import me.lanzhi.bluestarbot.api.contact.group.Group;
 import me.lanzhi.bluestarbot.api.contact.group.GroupMember;
 import me.lanzhi.bluestarbot.api.contact.group.NormalGroupMember;
+import me.lanzhi.bluestarbot.api.message.Message;
 import me.lanzhi.bluestarbot.api.message.Reply;
 import me.lanzhi.bluestarbot.internal.Mapping;
 import me.lanzhi.bluestarbot.internal.message.MessageImpl;
@@ -16,6 +18,8 @@ import net.mamoe.mirai.message.data.MusicShare;
 /**
  * 一个聊天频道
  *
+ * <p>注: 每个聊天频道,包括用户等,都属于一个机器人。所以两个机器人的同一位QQ好友需要单独获取.通过{@link #getBot()}获取机器人</p>
+ *
  * @see User 用户
  * @see Friend 好友
  * @see Stranger 陌生人
@@ -25,7 +29,9 @@ import net.mamoe.mirai.message.data.MusicShare;
  */
 public abstract class Contact
 {
+    @Internal
     private final ContactOrBot contact;
+    @Internal
     private final net.mamoe.mirai.contact.Contact toContact;
 
     public Contact(ContactOrBot contact)
@@ -64,11 +70,13 @@ public abstract class Contact
         return contact.equals(obj);
     }
 
+    @Internal
     public ContactOrBot getContact()
     {
         return contact;
     }
 
+    @Internal
     public net.mamoe.mirai.contact.Contact getToContact()
     {
         return toContact;
@@ -77,7 +85,7 @@ public abstract class Contact
     /**
      * 聊天频道的id,群聊则为群聊qq号,好友则为好友qq号
      *
-     * @return id
+     * @return 聊天频道的id
      */
     public final long getId()
     {
@@ -96,10 +104,9 @@ public abstract class Contact
 
     /**
      * @param message mirai代码
-     * @see Contact#sendMessage(me.lanzhi.bluestarbot.api.message.Message) 建议的方法
-     * @deprecated 以mirai码发送消息,不建议使用
+     * @deprecated 以mirai码发送消息,不建议使用.建议使用:{@link #sendMessage(Message)}和{@link #sendMessage(Message,Reply)}
      */
-    @Deprecated
+    @Deprecated(since="1.4.0",forRemoval=true)
     public final void sendMessageCode(String message)
     {
         sendMessage(me.lanzhi.bluestarbot.api.message.Message.getFromMiraiCode(message));
@@ -218,44 +225,47 @@ public abstract class Contact
     public enum Type
     {
         /**
-         * @see Bot
+         * 对应{@link Bot}
          */
         Bot(MessageSourceKind.FRIEND),
         /**
-         * @see Group
+         * 对应{@link Group}
          */
         Group(MessageSourceKind.GROUP),
         /**
-         * @see Friend
+         * 对应{@link Friend}
          */
         Friend(MessageSourceKind.FRIEND),
         /**
-         * @see Stranger
+         * 对应{@link Stranger}
          */
         Stranger(MessageSourceKind.STRANGER),
         /**
-         * @see NormalGroupMember
+         * 对应{@link NormalGroupMember}
          */
         NormalMember(MessageSourceKind.TEMP),
         /**
-         * @see AnonymousGroupMember
+         * 对应{@link AnonymousGroupMember}
          */
         AnonymousMember(MessageSourceKind.TEMP),
         /**
-         * @see OtherClient
+         * 对应{@link OtherClient}
          */
         OtherClient(null),
         /**
-         * 未知聊天
+         * 未知聊天类型,理论上不会出现
          */
         Unknown(null);
+        @Internal
         private final MessageSourceKind kind;
 
+        @Internal
         Type(MessageSourceKind kind)
         {
             this.kind=kind;
         }
 
+        @Internal
         public MessageSourceKind asMiraiMessageSourceKind()
         {
             return kind;

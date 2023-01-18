@@ -3,6 +3,7 @@ package me.lanzhi.bluestarbot.internal;
 import me.lanzhi.bluestarbot.BluestarBotPlugin;
 import me.lanzhi.bluestarbot.api.BluestarBot;
 import me.lanzhi.bluestarbot.api.Bot;
+import me.lanzhi.bluestarbot.api.Internal;
 import me.lanzhi.bluestarbot.api.contact.Friend;
 import me.lanzhi.bluestarbot.api.contact.User;
 import me.lanzhi.bluestarbot.api.contact.group.Group;
@@ -20,6 +21,7 @@ import static me.lanzhi.bluestarbot.internal.Utils.logger;
 /**
  * 消息监听,发送日志
  */
+@Internal
 public final class TestListener implements Listener
 {
     private final BluestarBotPlugin plugin;

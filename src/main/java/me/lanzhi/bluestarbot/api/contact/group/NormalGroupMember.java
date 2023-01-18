@@ -1,5 +1,6 @@
 package me.lanzhi.bluestarbot.api.contact.group;
 
+import me.lanzhi.bluestarbot.api.Internal;
 import net.mamoe.mirai.contact.NormalMember;
 
 import java.util.Date;
@@ -9,12 +10,13 @@ import java.util.Date;
  */
 public final class NormalGroupMember extends GroupMember
 {
-
+    @Internal
     public NormalGroupMember(NormalMember member)
     {
         super(member);
     }
 
+    @Internal
     public NormalMember getMember()
     {
         return (NormalMember) super.getMember();

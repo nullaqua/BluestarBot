@@ -1,5 +1,6 @@
 package me.lanzhi.bluestarbot.api.event.group.member.list;
 
+import me.lanzhi.bluestarbot.api.Internal;
 import me.lanzhi.bluestarbot.api.contact.Friend;
 import me.lanzhi.bluestarbot.api.event.BluestarBotEvent;
 import me.lanzhi.bluestarbot.internal.Mapping;
@@ -9,6 +10,7 @@ import me.lanzhi.bluestarbot.internal.Mapping;
  */
 public final class BotInvitedJoinGroupRequestEvent extends BluestarBotEvent
 {
+    @Internal
     public BotInvitedJoinGroupRequestEvent(net.mamoe.mirai.event.events.BotInvitedJoinGroupRequestEvent event)
     {
         super(event);
@@ -22,6 +24,7 @@ public final class BotInvitedJoinGroupRequestEvent extends BluestarBotEvent
         getEvent().accept();
     }
 
+    @Internal
     @Override
     public net.mamoe.mirai.event.events.BotInvitedJoinGroupRequestEvent getEvent()
     {

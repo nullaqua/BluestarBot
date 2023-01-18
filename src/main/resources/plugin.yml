@@ -5,3 +5,4 @@ api-version: 1.13
 commands:
   bluestarbot:
     permission: bluestargame.command
+website: https://bluestarbot.lanzhi.me

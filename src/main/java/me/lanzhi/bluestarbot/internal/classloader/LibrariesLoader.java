@@ -1,7 +1,10 @@
 package me.lanzhi.bluestarbot.internal.classloader;
 
 import me.lanzhi.bluestarbot.BluestarBotPlugin;
+import me.lanzhi.bluestarbot.api.Internal;
+import me.lanzhi.bluestarbot.internal.Utils;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.bukkit.Warning;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
@@ -13,15 +16,17 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
 import static me.lanzhi.bluestarbot.internal.Utils.logger;
 
+@Internal
 public class LibrariesLoader
 {
+    @Warning
+    @Internal
     static String getLibraryVersionMaven(String groupId,String artifactId,String repoUrl,String xmlTag) throws RuntimeException, IOException, ParserConfigurationException, SAXException
     {
         File CacheDir=new File(JavaPlugin.getPlugin(BluestarBotPlugin.class).getDataFolder(),"cache");
@@ -87,6 +92,7 @@ public class LibrariesLoader
         return doc.getElementsByTagName(xmlTag).item(0).getFirstChild().getNodeValue();
     }
 
+    @Internal
     private static void downloadFile(File file,URL url) throws IOException
     {
         try (InputStream is=url.openStream())
@@ -95,7 +101,8 @@ public class LibrariesLoader
         }
     }
 
-    static void loadLibraryClassMaven(String groupId,String artifactId,String version,String extra,String repo,File path) throws RuntimeException, IOException
+    @Internal
+    static void loadLibraryClassMaven(String groupId,String artifactId,String version,String extra,String repo,File path) throws Throwable
     {
         String name=artifactId+"-"+version+".jar";
         File saveLocation=new File(path,name);
@@ -107,6 +114,7 @@ public class LibrariesLoader
         loadLibraryClassLocal(saveLocation);
     }
 
+    @Internal
     static boolean downloadLibraryMaven(String groupId,String artifactId,String version,String extra,String repo,File file,boolean checkMD5) throws RuntimeException, IOException
     {
         if (!file.getParentFile().exists()&&!file.getParentFile().mkdirs())
@@ -165,9 +173,10 @@ public class LibrariesLoader
         return file.exists();
     }
 
-    static void loadLibraryClassLocal(File file) throws MalformedURLException
+    @Internal
+    static void loadLibraryClassLocal(File file) throws Throwable
     {
         logger().info("Loading library "+file);
-        MiraiLoader.classLoaderAccess().addURL(file.toURI().toURL());
+        Utils.classLoaderAccessor().addURL(file.toURI().toURL());
     }
 }

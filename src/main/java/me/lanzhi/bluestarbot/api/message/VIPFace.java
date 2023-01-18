@@ -1,5 +1,6 @@
 package me.lanzhi.bluestarbot.api.message;
 
+import me.lanzhi.bluestarbot.api.Internal;
 import me.lanzhi.bluestarbot.internal.message.MessageImpl;
 import net.mamoe.mirai.message.data.Message;
 import net.mamoe.mirai.message.data.VipFace;
@@ -47,6 +48,7 @@ public enum VIPFace implements MessageImpl
         return map.get(vipFace.getKind());
     }
 
+    @Internal
     @Override
     public Message toMirai()
     {

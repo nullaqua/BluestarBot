@@ -1,5 +1,6 @@
 package me.lanzhi.bluestarbot.internal.message;
 
+import me.lanzhi.bluestarbot.api.Internal;
 import me.lanzhi.bluestarbot.api.contact.Contact;
 import me.lanzhi.bluestarbot.api.message.FlashImage;
 
@@ -7,6 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
+@Internal
 public abstract class FlashImageImpl implements FlashImage, MessageImpl
 {
     public static FlashImageImpl create(File file,Contact contact)
@@ -38,6 +40,7 @@ public abstract class FlashImageImpl implements FlashImage, MessageImpl
         return toMirai().getImage().getImageId();
     }
 
+    @Internal
     public static final class Custom extends FlashImageImpl
     {
         private final ImageImpl image;
@@ -59,6 +62,7 @@ public abstract class FlashImageImpl implements FlashImage, MessageImpl
         }
     }
 
+    @Internal
     public static final class FromMirai extends FlashImageImpl
     {
         private final net.mamoe.mirai.message.data.FlashImage image;

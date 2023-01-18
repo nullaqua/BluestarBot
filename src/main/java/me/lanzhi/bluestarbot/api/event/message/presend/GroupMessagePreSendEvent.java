@@ -1,5 +1,6 @@
 package me.lanzhi.bluestarbot.api.event.message.presend;
 
+import me.lanzhi.bluestarbot.api.Internal;
 import me.lanzhi.bluestarbot.api.contact.group.Group;
 import me.lanzhi.bluestarbot.api.event.BluestarBotEvent;
 import me.lanzhi.bluestarbot.api.event.GroupEvent;
@@ -11,11 +12,13 @@ import me.lanzhi.bluestarbot.internal.Mapping;
  */
 public final class GroupMessagePreSendEvent extends BluestarBotEvent implements MessagePreSendEvent, GroupEvent
 {
+    @Internal
     public GroupMessagePreSendEvent(net.mamoe.mirai.event.events.GroupMessagePreSendEvent event)
     {
         super(event);
     }
 
+    @Internal
     @Override
     public Group getGroup()
     {

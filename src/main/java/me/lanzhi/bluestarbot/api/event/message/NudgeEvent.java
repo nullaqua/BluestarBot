@@ -1,20 +1,23 @@
 package me.lanzhi.bluestarbot.api.event.message;
 
-import me.lanzhi.bluestarbot.internal.Mapping;
+import me.lanzhi.bluestarbot.api.Internal;
 import me.lanzhi.bluestarbot.api.contact.Contact;
 import me.lanzhi.bluestarbot.api.contact.User;
 import me.lanzhi.bluestarbot.api.event.BluestarBotEvent;
+import me.lanzhi.bluestarbot.internal.Mapping;
 
 /**
  * 戳一戳
  */
 public final class NudgeEvent extends BluestarBotEvent
 {
+    @Internal
     public NudgeEvent(net.mamoe.mirai.event.events.NudgeEvent event)
     {
         super(event);
     }
 
+    @Internal
     @Override
     public net.mamoe.mirai.event.events.NudgeEvent getEvent()
     {

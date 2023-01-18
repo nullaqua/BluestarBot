@@ -1,5 +1,6 @@
 package me.lanzhi.bluestarbot.internal.message;
 
+import me.lanzhi.bluestarbot.api.Internal;
 import me.lanzhi.bluestarbot.api.contact.Contact;
 import me.lanzhi.bluestarbot.api.message.Image;
 import net.mamoe.mirai.utils.ExternalResource;
@@ -8,6 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
+@Internal
 public abstract class ImageImpl implements Image, MessageImpl
 {
 
@@ -46,6 +48,7 @@ public abstract class ImageImpl implements Image, MessageImpl
 
     public abstract net.mamoe.mirai.message.data.Image toMirai();
 
+    @Internal
     private static final class Custom extends ImageImpl
     {
         private final ExternalResource resource;
@@ -76,6 +79,7 @@ public abstract class ImageImpl implements Image, MessageImpl
         }
     }
 
+    @Internal
     private static final class FromMirai extends ImageImpl
     {
         private final net.mamoe.mirai.message.data.Image image;

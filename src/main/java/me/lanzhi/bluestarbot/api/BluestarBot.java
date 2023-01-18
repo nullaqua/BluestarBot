@@ -3,6 +3,7 @@ package me.lanzhi.bluestarbot.api;
 import me.lanzhi.bluestarbot.BluestarBotPlugin;
 import me.lanzhi.bluestarbot.internal.Manager;
 import me.lanzhi.bluestarbot.internal.Mapping;
+import me.lanzhi.bluestarbot.internal.Utils;
 import me.lanzhi.bluestarbot.internal.classloader.MiraiLoader;
 import net.mamoe.mirai.Mirai;
 import net.mamoe.mirai.utils.BotConfiguration;
@@ -32,7 +33,7 @@ public final class BluestarBot
      */
     public static List<Bot> getBots()
     {
-        Thread.currentThread().setContextClassLoader(MiraiLoader.classLoaderAccess().getClassLoader());
+        Thread.currentThread().setContextClassLoader(Utils.classLoaderAccessor().classLoader());
         List<Bot> list=new ArrayList<>();
         for (net.mamoe.mirai.Bot bot: net.mamoe.mirai.Bot.getInstances())
         {
@@ -51,7 +52,7 @@ public final class BluestarBot
     @NotNull
     public static Bot createBot(long id,String password)
     {
-        Thread.currentThread().setContextClassLoader(MiraiLoader.classLoaderAccess().getClassLoader());
+        Thread.currentThread().setContextClassLoader(Utils.classLoaderAccessor().classLoader());
         Bot bot=getBot(id);
         if (bot!=null)
         {
@@ -68,7 +69,7 @@ public final class BluestarBot
         logger().warning("[BluestarBot]预备工作完成,开始新建bot");
         bot=Mapping.map(Mirai.getInstance().getBotFactory().newBot(id,password,configuration));
         logger().warning("[BluestarBot]新建bot完成,开始登录");
-        Thread.currentThread().setContextClassLoader(MiraiLoader.classLoaderAccess().getClassLoader());
+        Thread.currentThread().setContextClassLoader(Utils.classLoaderAccessor().classLoader());
         bot.login();
         logger().warning("[BluestarBot]登录成功!");
         return bot;
@@ -82,7 +83,7 @@ public final class BluestarBot
      */
     public static Bot getBot(long id)
     {
-        Thread.currentThread().setContextClassLoader(MiraiLoader.classLoaderAccess().getClassLoader());
+        Thread.currentThread().setContextClassLoader(Utils.classLoaderAccessor().classLoader());
         return Mapping.map(net.mamoe.mirai.Bot.getInstanceOrNull(id));
     }
 
@@ -139,5 +140,10 @@ public final class BluestarBot
     public static UUID removeBind(long id)
     {
         return plugin.getBind().removeBind(id);
+    }
+
+    public static IAutoLogin getAutoLogin()
+    {
+        return plugin.getAutoLogin();
     }
 }

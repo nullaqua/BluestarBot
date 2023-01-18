@@ -1,5 +1,6 @@
 package me.lanzhi.bluestarbot.api.event.message.presend;
 
+import me.lanzhi.bluestarbot.api.Internal;
 import me.lanzhi.bluestarbot.api.contact.Friend;
 import me.lanzhi.bluestarbot.api.event.FriendEvent;
 import me.lanzhi.bluestarbot.api.event.MessagePreSendEvent;
@@ -10,11 +11,13 @@ import me.lanzhi.bluestarbot.internal.Mapping;
  */
 public final class FriendMessagePreSendEvent extends UserMessagePreSendEvent implements MessagePreSendEvent, FriendEvent
 {
+    @Internal
     public FriendMessagePreSendEvent(net.mamoe.mirai.event.events.FriendMessagePreSendEvent event)
     {
         super(event);
     }
 
+    @Internal
     @Override
     public net.mamoe.mirai.event.events.FriendMessagePreSendEvent getEvent()
     {

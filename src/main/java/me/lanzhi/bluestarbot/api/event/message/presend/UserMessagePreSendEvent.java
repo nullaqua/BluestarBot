@@ -1,5 +1,6 @@
 package me.lanzhi.bluestarbot.api.event.message.presend;
 
+import me.lanzhi.bluestarbot.api.Internal;
 import me.lanzhi.bluestarbot.api.contact.User;
 import me.lanzhi.bluestarbot.api.event.BluestarBotEvent;
 import me.lanzhi.bluestarbot.api.event.MessagePreSendEvent;
@@ -11,6 +12,7 @@ import me.lanzhi.bluestarbot.internal.Mapping;
  */
 public abstract class UserMessagePreSendEvent extends BluestarBotEvent implements UserEvent, MessagePreSendEvent
 {
+    @Internal
     public UserMessagePreSendEvent(net.mamoe.mirai.event.events.UserMessagePreSendEvent event)
     {
         super(event);
@@ -28,6 +30,7 @@ public abstract class UserMessagePreSendEvent extends BluestarBotEvent implement
         return Mapping.map(getEvent().getTarget());
     }
 
+    @Internal
     @Override
     public net.mamoe.mirai.event.events.UserMessagePreSendEvent getEvent()
     {

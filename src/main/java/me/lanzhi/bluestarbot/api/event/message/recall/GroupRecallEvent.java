@@ -1,5 +1,6 @@
 package me.lanzhi.bluestarbot.api.event.message.recall;
 
+import me.lanzhi.bluestarbot.api.Internal;
 import me.lanzhi.bluestarbot.api.contact.group.Group;
 import me.lanzhi.bluestarbot.api.contact.group.GroupMember;
 import me.lanzhi.bluestarbot.api.contact.group.NormalGroupMember;
@@ -13,6 +14,7 @@ import me.lanzhi.bluestarbot.internal.Mapping;
  */
 public final class GroupRecallEvent extends BluestarBotEvent implements MessageRecallEvent, GroupMemberEvent
 {
+    @Internal
     public GroupRecallEvent(net.mamoe.mirai.event.events.MessageRecallEvent.GroupRecall event)
     {
         super(event);
@@ -36,6 +38,7 @@ public final class GroupRecallEvent extends BluestarBotEvent implements MessageR
         return Mapping.map(getEvent().getAuthor());
     }
 
+    @Internal
     @Override
     public net.mamoe.mirai.event.events.MessageRecallEvent.GroupRecall getEvent()
     {

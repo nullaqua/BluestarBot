@@ -6,6 +6,8 @@ import me.lanzhi.bluestarbot.api.contact.group.GroupMember;
 
 /**
  * 群成员相关事件,也是一种群事件,一种用户事件
+ * @see GroupEvent 群事件
+ * @see UserEvent 用户事件
  */
 public interface GroupMemberEvent extends GroupEvent, UserEvent
 {

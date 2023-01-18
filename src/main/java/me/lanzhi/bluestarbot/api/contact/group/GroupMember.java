@@ -1,25 +1,29 @@
 package me.lanzhi.bluestarbot.api.contact.group;
 
+import me.lanzhi.bluestarbot.api.Internal;
 import me.lanzhi.bluestarbot.api.contact.User;
 import me.lanzhi.bluestarbot.internal.Mapping;
 import net.mamoe.mirai.contact.Member;
 
 /**
  * 一个群员
- * 注: 使用GroupMember.sendMessage()是以群临时会话的形式发送消息
- * 若想在群内发送,请使用getGroup().sendMessage()
+ * <p>注: 使用{@code GroupMember.sendMessage()}是以群临时会话的形式发送消息
+ * 若想在群内发送,请使用{@code getGroup().sendMessage()}
+ *
+ * <p>一个群员实例是特定群聊的某个群员。即使是不同群聊的同一人，也需要获取不同实例
  *
  * @see AnonymousGroupMember 匿名群员
  * @see NormalGroupMember 普通群员
  */
 public class GroupMember extends User
 {
-
+    @Internal
     public GroupMember(Member member)
     {
         super(member);
     }
 
+    @Internal
     public Member getMember()
     {
         return (Member) super.getUser();
@@ -67,7 +71,7 @@ public class GroupMember extends User
      * 获取群昵称,未设置时为空
      *
      * @return 群昵称
-     * @see GroupMember#getName() 显示名称
+     * @see #getName() 获取显示名称
      */
     public String getNameCard()
     {
@@ -78,18 +82,27 @@ public class GroupMember extends User
      * 获取昵称,不一定是群内显示的名称
      *
      * @return 昵称
-     * @see GroupMember#getName() 显示名称
+     * @see #getName() 获取显示名称
      */
     public String getNick()
     {
         return getMember().getNick();
     }
 
+    /**
+     * 获取群员在群内权限
+     * @see MemberPermission 群员的权限
+     * @return 群员的权限
+     */
     public MemberPermission getPermission()
     {
         return Mapping.map(getMember().getPermission());
     }
 
+    /**
+     * 此群员所属的群聊
+     * @return 所属的群聊
+     */
     public Group getGroup()
     {
         return Mapping.map(getMember().getGroup());

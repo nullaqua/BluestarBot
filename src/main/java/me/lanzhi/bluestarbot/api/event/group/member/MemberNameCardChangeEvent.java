@@ -1,5 +1,6 @@
 package me.lanzhi.bluestarbot.api.event.group.member;
 
+import me.lanzhi.bluestarbot.api.Internal;
 import me.lanzhi.bluestarbot.api.contact.group.NormalGroupMember;
 import me.lanzhi.bluestarbot.api.event.BluestarBotEvent;
 import me.lanzhi.bluestarbot.api.event.GroupMemberEvent;
@@ -11,6 +12,7 @@ import net.mamoe.mirai.event.events.MemberCardChangeEvent;
  */
 public final class MemberNameCardChangeEvent extends BluestarBotEvent implements GroupMemberEvent
 {
+    @Internal
     public MemberNameCardChangeEvent(MemberCardChangeEvent event)
     {
         super(event);
@@ -21,6 +23,7 @@ public final class MemberNameCardChangeEvent extends BluestarBotEvent implements
         return getEvent().getNew();
     }
 
+    @Internal
     @Override
     public MemberCardChangeEvent getEvent()
     {

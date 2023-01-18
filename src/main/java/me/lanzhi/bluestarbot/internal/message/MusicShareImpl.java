@@ -1,8 +1,10 @@
 package me.lanzhi.bluestarbot.internal.message;
 
+import me.lanzhi.bluestarbot.api.Internal;
 import me.lanzhi.bluestarbot.api.message.MusicShare;
 import me.lanzhi.bluestarbot.api.message.MusicShare.MusicKind;
 
+@Internal
 public class MusicShareImpl implements MusicShare, MessageImpl
 {
     private final MusicKind kind;

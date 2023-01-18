@@ -1,7 +1,9 @@
 package me.lanzhi.bluestarbot.internal.message;
 
+import me.lanzhi.bluestarbot.api.Internal;
 import me.lanzhi.bluestarbot.api.message.Dice;
 
+@Internal
 public final class DiceImpl implements MessageImpl, Dice
 {
     private final net.mamoe.mirai.message.data.Dice dice;

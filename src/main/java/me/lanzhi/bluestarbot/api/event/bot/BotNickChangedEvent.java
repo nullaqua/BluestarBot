@@ -1,6 +1,7 @@
 package me.lanzhi.bluestarbot.api.event.bot;
 
 import me.lanzhi.bluestarbot.api.Bot;
+import me.lanzhi.bluestarbot.api.Internal;
 import me.lanzhi.bluestarbot.api.event.BluestarBotEvent;
 import me.lanzhi.bluestarbot.api.event.BotEvent;
 
@@ -10,7 +11,7 @@ import me.lanzhi.bluestarbot.api.event.BotEvent;
  * @see Bot#getNick() 获取昵称
  */
 public final class BotNickChangedEvent extends BluestarBotEvent implements BotEvent
-{
+{    @Internal
     public BotNickChangedEvent(net.mamoe.mirai.event.events.BotNickChangedEvent event)
     {
         super(event);
@@ -25,7 +26,7 @@ public final class BotNickChangedEvent extends BluestarBotEvent implements BotEv
     {
         return getEvent().getFrom();
     }
-
+    @Internal
     @Override
     public net.mamoe.mirai.event.events.BotNickChangedEvent getEvent()
     {

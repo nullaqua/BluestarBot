@@ -1,6 +1,7 @@
 package me.lanzhi.bluestarbot.api.event;
 
 import me.lanzhi.bluestarbot.api.Bot;
+import me.lanzhi.bluestarbot.api.Internal;
 import me.lanzhi.bluestarbot.api.message.MessageChain;
 import me.lanzhi.bluestarbot.internal.Mapping;
 import net.mamoe.mirai.contact.Contact;
@@ -42,6 +43,7 @@ public interface MessagePostSendEvent
         return Mapping.map(getEvent().getTarget());
     }
 
+    @Internal
     public net.mamoe.mirai.event.events.MessagePostSendEvent<? extends Contact> getEvent();
 
     /**
@@ -90,8 +92,8 @@ public interface MessagePostSendEvent
     }
 
     /**
-     * 定时撤回消息,此操作不会堵塞线程,而是启动另一线程,返回BooleanSupplier用于获取结果
-     * 通过BooleanSupplier.getAsBoolean()方法获取操作是否成功,此方法可能堵塞线程,直至撤回完成或失败
+     * 定时撤回消息,此操作不会堵塞线程,而是启动另一线程,返回 {@link BooleanSupplier} 用于获取结果
+     * 通过 {@link BooleanSupplier#getAsBoolean()} 方法获取操作是否成功,此方法可能堵塞线程,直至撤回完成或失败
      *
      * @param seconds 时间,单位:秒
      * @return 撤回操作结果获取器

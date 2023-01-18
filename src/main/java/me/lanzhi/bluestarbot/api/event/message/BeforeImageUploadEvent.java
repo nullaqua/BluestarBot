@@ -1,5 +1,6 @@
 package me.lanzhi.bluestarbot.api.event.message;
 
+import me.lanzhi.bluestarbot.api.Internal;
 import me.lanzhi.bluestarbot.api.contact.Contact;
 import me.lanzhi.bluestarbot.api.event.BluestarBotEvent;
 import me.lanzhi.bluestarbot.api.message.MessageChain;
@@ -11,17 +12,17 @@ import java.io.InputStream;
 /**
  * 机器人上传图片事件
  *
- * @see Contact#sendMessage(MessageChain) 发送图片触发,取消此事件可能导致发送失败
+ * @see Contact#sendMessage(me.lanzhi.bluestarbot.api.message.Message) 发送图片触发,取消此事件可能导致发送失败
  */
 public final class BeforeImageUploadEvent extends BluestarBotEvent implements Cancellable
 {
-    private boolean cancel=false;
-
+    @Internal
     public BeforeImageUploadEvent(net.mamoe.mirai.event.events.BeforeImageUploadEvent event)
     {
         super(event);
     }
 
+    @Internal
     @Override
     public net.mamoe.mirai.event.events.BeforeImageUploadEvent getEvent()
     {
@@ -41,12 +42,12 @@ public final class BeforeImageUploadEvent extends BluestarBotEvent implements Ca
     @Override
     public boolean isCancelled()
     {
-        return cancel;
+        return super.isCancelled();
     }
 
     @Override
     public void setCancelled(boolean cancel)
     {
-        this.cancel=cancel;
+        super.setCancelled(cancel);
     }
 }

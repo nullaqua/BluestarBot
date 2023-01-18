@@ -17,6 +17,7 @@ public final class Bot extends User
 {
     private final Friend asFriend;
 
+    @Internal
     public Bot(net.mamoe.mirai.Bot bot)
     {
         super(bot);
@@ -31,6 +32,7 @@ public final class Bot extends User
         return getMiraiBot().isOnline();
     }
 
+    @Internal
     public net.mamoe.mirai.Bot getMiraiBot()
     {
         return (net.mamoe.mirai.Bot) super.getUser();

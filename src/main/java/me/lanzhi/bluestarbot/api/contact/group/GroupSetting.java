@@ -1,5 +1,6 @@
 package me.lanzhi.bluestarbot.api.contact.group;
 
+import me.lanzhi.bluestarbot.api.Internal;
 import net.mamoe.mirai.contact.GroupSettings;
 
 /**
@@ -7,8 +8,10 @@ import net.mamoe.mirai.contact.GroupSettings;
  */
 public final class GroupSetting
 {
+    @Internal
     private final GroupSettings settings;
 
+    @Internal
     public GroupSetting(GroupSettings settings)
     {
         assert settings!=null;
