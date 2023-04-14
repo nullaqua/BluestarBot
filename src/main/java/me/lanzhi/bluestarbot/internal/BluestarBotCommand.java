@@ -1,355 +1,315 @@
 package me.lanzhi.bluestarbot.internal;
 
+import me.lanzhi.api.command.*;
 import me.lanzhi.bluestarbot.BluestarBotPlugin;
 import me.lanzhi.bluestarbot.api.BluestarBot;
 import me.lanzhi.bluestarbot.api.Bot;
 import me.lanzhi.bluestarbot.api.Internal;
 import me.lanzhi.bluestarbot.api.contact.Friend;
 import me.lanzhi.bluestarbot.api.contact.group.Group;
-import me.lanzhi.bluestarbot.api.contact.group.NormalGroupMember;
-import me.lanzhi.bluestarbot.internal.Manager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 import java.util.function.Consumer;
-
+import java.util.stream.Collectors;
 /**
  * 插件指令处理类
  */
 @Internal
-public final class BluestarBotCommand implements CommandExecutor, TabExecutor
+@CommandName("bluestarbot")
+@CommandAlias({"bsbot"})
+public final class BluestarBotCommand
 {
+    @ParseTab("verify <qq> <?>")
+    public final String verify="<code>";
+    @ParseTab("autologin add <?>")
+    public final String addAutoLogin0="<QQId>";
+    @ParseTab("autologin add <qq> <?>")
+    public final String addAutoLogin1="<password>";
+    @ParseTab({"sendfriend <bot> <friend> <?>","sendgroup <bot> <group> <?>","sendmember <bot> <group> <member> <?>"})
+    public final String sendFriend="<message>";
+    @ParseCommand("...")
+    public final String unknownCommand=ChatColor.RED+"未知指令";
     private final BluestarBotPlugin plugin;
+    @ParseTab("addbind <player> <?>")
+    public String addBind="<QQId>";
 
     public BluestarBotCommand(BluestarBotPlugin plugin)
     {
         this.plugin=plugin;
     }
 
-    @Override
-    public boolean onCommand(CommandSender sender,Command command,String label,String[] args)
+    @ParseCommand("bind ...")
+    public void bind(CommandSender sender)
     {
-        try
+        if (!(sender instanceof Player))
         {
-            onCommand0(sender,command,label,args);
-            return true;
-        }
-        catch (Exception e)
-        {
-            sender.sendMessage(ChatColor.RED+"格式错误,详细信息:");
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    private void onCommand0(CommandSender sender,Command command,String label,String[] args)
-    {
-        if (args.length<1)
-        {
+            sender.sendMessage(ChatColor.RED+"此指令仅允许玩家使用");
             return;
         }
-        switch (args[0].toLowerCase())
-        {
-            case "bind":
-            {
-                if (!(sender instanceof Player))
-                {
-                    sender.sendMessage(ChatColor.RED+"此指令仅允许玩家使用");
-                    return;
-                }
-                plugin.getBind().getGui().open((Player) sender);
-                return;
-            }
-            case "addbind":
-            {
-                OfflinePlayer player=Bukkit.getOfflinePlayer(args[1]);
-                long id=Long.parseLong(args[2]);
-                sender.sendMessage(ChatColor.AQUA+"添加绑定:"+player.getUniqueId()+" "+id);
-                plugin.getBind().addBind(player.getUniqueId(),id);
-                sender.sendMessage(ChatColor.GREEN+"绑定成功!");
-                return;
-            }
-            case "login":
-            {
-                if (args.length<3)
-                {
-                    sender.sendMessage("/bluestarqq login qqid password");
-                    return;
-                }
-                Bukkit.getScheduler().runTaskAsynchronously(plugin,()->
-                {
-                    BluestarBot.createBot(Long.parseLong(args[1]),args[2]);
-                    sender.sendMessage(ChatColor.GREEN+"操作成功");
-                });
-                return;
-            }
-            case "verify":
-            {
-                if (args.length>2)
-                {
-                    Manager.res.put(Long.parseLong(args[1]),args[2]);
-                }
-                else if (args.length>1)
-                {
-                    Manager.res.put(Long.parseLong(args[1]),"");
-                }
-                else
-                {
-                    sender.sendMessage("/bluestarqq verify qqid message");
-                }
-                sender.sendMessage(ChatColor.GREEN+"操作成功");
-                return;
-            }
-            case "cancel":
-            {
-                if (args.length<2)
-                {
-                    sender.sendMessage("/bluestarqq cancel qqid");
-                    return;
-                }
-                Manager.bots.remove((Object) Long.parseLong(args[1]));
-                sender.sendMessage(ChatColor.GREEN+"操作成功");
-                return;
-            }
-            case "logout":
-            {
-                if (args.length<2)
-                {
-                    sender.sendMessage("/bluestarqq logout qqid");
-                    return;
-                }
-                BluestarBot.getBot(Long.parseLong(args[1])).close();
-                sender.sendMessage(ChatColor.GREEN+"操作成功");
-                return;
-            }
-            case "list":
-            {
-                sender.sendMessage(ChatColor.AQUA+"[BluestarBot] 已登录的机器人:");
-                BluestarBot.getBots().forEach(bot->sender.sendMessage(ChatColor.AQUA+bot.getNick()+"-"+bot.getId()));
-
-                sender.sendMessage(ChatColor.GREEN+"操作成功"); return;
-            }
-            case "autologin":
-            {
-                switch (args[1])
-                {
-                    case "add":
-                    {
-                        plugin.getAutoLogin().addAutologin(Long.parseLong(args[2]),args[3]);
-                        sender.sendMessage(ChatColor.GREEN+"操作成功");
-                        return;
-                    }
-                    case "remove":
-                    {
-                        plugin.getAutoLogin().removeAutoLogin(Long.parseLong(args[2]));
-                        sender.sendMessage(ChatColor.GREEN+"操作成功");
-                        return;
-                    }
-                    case "list":
-                    {
-                        sender.sendMessage(ChatColor.AQUA+"自动登录机器人:");
-                        Consumer<Long> consumer=id->
-                        {
-                            if (BluestarBot.getBot(id)!=null)
-                            {
-                                sender.sendMessage(id+"-"+ChatColor.GREEN+"已登录");
-                            }
-                            else
-                            {
-                                sender.sendMessage(id+"-"+ChatColor.RED+"未登录");
-                            }
-                        };
-                        plugin.getAutoLogin().getList().forEach(consumer);
-                        return;
-                    }
-                    case "loginall":
-                    {
-                        Bukkit.getScheduler().runTaskAsynchronously(plugin,()->
-                        {
-                            plugin.getAutoLogin().loginAll();
-                            sender.sendMessage(ChatColor.GREEN+"操作成功");
-                        });
-                        return;
-                    }
-                    default:
-                        return;
-                }
-            }
-            case "sendfriend":
-            {
-                Friend friend=BluestarBot.getBot(Long.parseLong(args[1])).getFriend(Long.parseLong(args[2]));
-                StringBuilder stringBuilder=new StringBuilder();
-                for (int i=3;i<args.length;i++)
-                {
-                    stringBuilder.append(args[i]).append(' ');
-                }
-                friend.sendMessageCode(stringBuilder.toString());
-                sender.sendMessage(ChatColor.GREEN+"操作成功");
-                return;
-            }
-            case "sendgroup":
-            {
-                Group group=BluestarBot.getBot(Long.parseLong(args[1])).getGroup(Long.parseLong(args[2]));
-                StringBuilder stringBuilder=new StringBuilder();
-                for (int i=3;i<args.length;i++)
-                {
-                    stringBuilder.append(args[i]).append(' ');
-                }
-                group.sendMessageCode(stringBuilder.toString());
-                sender.sendMessage(ChatColor.GREEN+"操作成功");
-                return;
-            }
-            case "sendmember":
-            {
-                NormalGroupMember member=BluestarBot.getBot(Long.parseLong(args[1]))
-                                                    .getGroup(Long.parseLong(args[2]))
-                                                    .getMember(Long.parseLong(args[3]));
-                StringBuilder stringBuilder=new StringBuilder();
-                for (int i=4;i<args.length;i++)
-                {
-                    stringBuilder.append(args[i]).append(' ');
-                }
-                member.sendMessageCode(stringBuilder.toString());
-                sender.sendMessage(ChatColor.GREEN+"操作成功");
-                return;
-            }
-        }
-        return;
+        plugin.getBind().getGui().open((Player) sender);
     }
 
-    @Override
-    public List<String> onTabComplete(CommandSender sender,Command command,String alias,String[] args)
+    @ParseCommand("addbind <p> <qq>")
+    public String addBind(@Get("p") OfflinePlayer player,@Get("qq") Long qq)
     {
-        switch (args.length)
+        if (qq==null)
         {
-            case 1:
-            {
-                return Arrays.asList("login",
-                                     "verify",
-                                     "cancel",
-                                     "logout",
-                                     "list",
-                                     "autologin",
-                                     "sendfriend",
-                                     "sendgroup",
-                                     "sendmember",
-                                     "bind",
-                                     "addbind");
-            }
-            case 2:
-            {
-                switch (args[0].toLowerCase())
-                {
-                    case "addbind":
-                        return null;
-                    case "login":
-                    case "verify":
-                    case "cancel":
-                    {
-                        return Collections.singletonList("qqid");
-                    }
-                    case "logout":
-                    case "sendfriend":
-                    case "sendgroup":
-                    case "sendmember":
-                    {
-                        ArrayList<String> arrayList=new ArrayList<>();
-                        BluestarBot.getBots().forEach(bot->arrayList.add(bot.getId()+""));
-                        return arrayList;
-                    }
-                    case "autologin":
-                    {
-                        return Arrays.asList("list","add","remove","loginall");
-                    }
-                    default:
-                        return Collections.emptyList();
-                }
-            }
-            case 3:
-            {
-                if ("autologin".equalsIgnoreCase(args[0]))
-                {
-                    if ("add".equalsIgnoreCase(args[1])||"remove".equalsIgnoreCase(args[1]))
-                    {
-                        return Collections.singletonList("qqid");
-                    }
-                    return Collections.emptyList();
-                }
-                if ("addbind".equalsIgnoreCase(args[0]))
-                {
-                    return Collections.singletonList("qqid");
-                }
-                List<String> a=new ArrayList<>();
-                Bot bot;
-                try
-                {
-                    bot=BluestarBot.getBot(Long.parseLong(args[1]));
-                    if (bot==null)
-                    {
-                        return Collections.emptyList();
-                    }
-                }
-                catch (Exception e)
-                {
-                    return Collections.emptyList();
-                }
-                switch (args[0].toLowerCase())
-                {
-                    case "sendfriend":
-                    {
-                        bot.getFriends().forEach(friend->a.add(friend.getId()+""));
-                        return a;
-                    }
-                    case "sendgroup":
-                    case "sendmember":
-                    {
-                        ArrayList<String> arrayList=new ArrayList<>();
-                        bot.getGroups().forEach(group->arrayList.add(group.getId()+""));
-                        return arrayList;
-                    }
-                    default:
-                        return Collections.emptyList();
-                }
-            }
-            case 4:
-            {
-                if ("autologin".equalsIgnoreCase(args[0])&&"add".equalsIgnoreCase(args[1]))
-                {
-                    return Collections.singletonList("password");
-                }
-                if (!"sendmember".equalsIgnoreCase(args[0]))
-                {
-                    return Collections.emptyList();
-                }
-                Group group;
-                try
-                {
-                    Bot bot=BluestarBot.getBot(Long.parseLong(args[1]));
-                    group=bot.getGroup(Long.parseLong(args[2]));
-                    if (group==null)
-                    {
-                        return Collections.emptyList();
-                    }
-                }
-                catch (Exception e)
-                {
-                    return Collections.emptyList();
-                }
-                ArrayList<String> s=new ArrayList<>();
-                group.getMembers().forEach(normalGroupMember->s.add(normalGroupMember.getId()+""));
-                return s;
-            }
+            return ChatColor.RED+"QQ号码不合法";
         }
-        return Collections.emptyList();
+        if (player==null)
+        {
+            return ChatColor.RED+"玩家不存在";
+        }
+        plugin.getBind().addBind(player.getUniqueId(),qq);
+        return ChatColor.GREEN+"成功为玩家"+player.getName()+"绑定QQ号"+qq;
+    }
+
+    @ParseCommand("login <qq> <pw> [prot]")
+    public String login(@Get("qq") Long qq,@Get("pw") String pw,@Get("prot") BluestarBot.Protocol prot)
+    {
+        if (qq==null)
+        {
+            return ChatColor.RED+"QQ号码不合法";
+        }
+        BluestarBot.createBot(qq,pw,prot);
+        return null;
+    }
+
+    @ParseCommand("logout <qq>")
+    public String logout(@Get("qq") Long qq)
+    {
+        if (qq==null)
+            return ChatColor.RED+"QQ号码不合法";
+        var bot=BluestarBot.getBot(qq);
+        if (bot==null)
+            return ChatColor.RED+"机器人不存在";
+        bot.close();
+        return ChatColor.GREEN+"已登出";
+    }
+
+    @ParseCommand("verify <qq> <code>")
+    public String verify(@Get("qq") Long qq,@Get("code") String code)
+    {
+        if (qq==null)
+            return ChatColor.RED+"QQ号码不合法";
+        if (code==null)
+            return ChatColor.RED+"验证码不合法";
+        Manager.setRes(qq,code);
+        return null;
+    }
+
+    @ParseCommand("cancel <qq>")
+    public String cancel(@Get("qq") Long qq)
+    {
+        if (qq==null)
+            return ChatColor.RED+"QQ号码不合法";
+        Manager.cancel(qq);
+        return ChatColor.GREEN+"已取消登录";
+    }
+
+    @ParseCommand("list")
+    public Object list()
+    {
+        var list=new ArrayList<String>();
+        list.add(ChatColor.AQUA+"[BluestarBot] 已登录的机器人:");
+        BluestarBot.getBots().forEach(bot->list.add(ChatColor.AQUA+bot.getNick()+"-"+bot.getId()));
+        return list;
+    }
+
+    @ParseCommand("autologin add <qq> <pw> [prot]")
+    public String addAutoLogin(@Get("qq") Long qq,@Get("pw") String pw,@Get("prot") BluestarBot.Protocol prot)
+    {
+        if (qq==null)
+            return ChatColor.RED+"QQ号码不合法";
+        if (pw==null)
+            return ChatColor.RED+"密码不合法";
+        plugin.getAutoLogin().addAutologin(qq,pw,prot);
+        return ChatColor.GREEN+"已添加自动登录";
+    }
+
+    @ParseCommand("autologin remove <qq>")
+    public String removeAutoLogin(@Get("qq") Long qq)
+    {
+        if (qq==null)
+            return ChatColor.RED+"QQ号码不合法";
+        plugin.getAutoLogin().removeAutoLogin(qq);
+        return ChatColor.GREEN+"已移除自动登录";
+    }
+
+    @ParseCommand("autologin list")
+    public Object listAutoLogin()
+    {
+        var list=new ArrayList<String>();
+        list.add(ChatColor.AQUA+"[BluestarBot] 已添加的自动登录:");
+        Consumer<Long> consumer=id->
+        {
+            if (BluestarBot.getBot(id)!=null)
+                list.add(id+"-"+ChatColor.GREEN+"已登录");
+            else
+                list.add(id+"-"+ChatColor.RED+"未登录");
+        };
+        plugin.getAutoLogin().getList().forEach(consumer);
+        return list;
+    }
+
+    @ParseCommand("autologin loginall")
+    public String loginAll()
+    {
+        Bukkit.getScheduler().runTaskAsynchronously(plugin,()->plugin.getAutoLogin().loginAll());
+        return ChatColor.GREEN+"已开始登录";
+    }
+
+    @ParseCommand("sendfriend <bot> <firend> ...")
+    public String sendFriend(@Get("bot") Long botqq,@Get("firend") Long friendqq,@Get("...") String msg)
+    {
+        Bot bot=BluestarBot.getBot(botqq);
+        if (bot==null)
+            return ChatColor.RED+"机器人不存在";
+        Friend friend=bot.getFriend(friendqq);
+        if (friend==null)
+            return ChatColor.RED+"好友不存在";
+        if (msg==null||msg.isEmpty())
+            return ChatColor.RED+"消息不能为空";
+        friend.sendMessage(msg);
+        return ChatColor.GREEN+"已发送";
+    }
+
+    @ParseCommand("sendgroup <bot> <group> ...")
+    public String sendGroup(@Get("bot") Long botqq,@Get("group") Long groupqq,@Get("...") String msg)
+    {
+        Bot bot=BluestarBot.getBot(botqq);
+        if (bot==null)
+            return ChatColor.RED+"机器人不存在";
+        var group=bot.getGroup(groupqq);
+        if (group==null)
+            return ChatColor.RED+"群不存在";
+        if (msg==null||msg.isEmpty())
+            return ChatColor.RED+"消息不能为空";
+        group.sendMessage(msg);
+        return ChatColor.GREEN+"已发送";
+    }
+
+    @ParseCommand("sendmember <bot> <group> <member> ...")
+    public String sendMember(@Get("bot") Long botqq,@Get("group") Long groupqq,@Get("member") Long memberqq,@Get("...") String msg)
+    {
+        Bot bot=BluestarBot.getBot(botqq);
+        if (bot==null)
+            return ChatColor.RED+"机器人不存在";
+        var group=bot.getGroup(groupqq);
+        if (group==null)
+            return ChatColor.RED+"群不存在";
+        var member=group.getMember(groupqq);
+        if (member==null)
+            return ChatColor.RED+"成员不存在";
+        if (msg==null||msg.isEmpty())
+            return ChatColor.RED+"消息不能为空";
+        member.sendMessage(msg);
+        return ChatColor.GREEN+"已发送";
+    }
+
+    @ParseTab("<?>")
+    public Object tab()
+    {
+        return new String[]{"login",
+                            "verify",
+                            "cancel",
+                            "logout",
+                            "list",
+                            "autologin",
+                            "sendfriend",
+                            "sendgroup",
+                            "sendmember",
+                            "bind",
+                            "addbind"};
+    }
+
+    @ParseTab("login <?>")
+    public Object tabLogin()
+    {
+        return "<QQId>";
+    }
+
+    @ParseTab("addbind <?>")
+    public Object tabAddBind()
+    {
+        return Bukkit.getOnlinePlayers();
+    }
+
+    @ParseTab("verify <?>")
+    public Object tabVerify()
+    {
+        return Manager.getVerifyingBots();
+    }
+
+    @ParseTab("cancel <?>")
+    public Object tabCancel()
+    {
+        return Manager.getVerifyingBots();
+    }
+
+    @ParseTab("logout <?>")
+    public Object tabLogout()
+    {
+        return BluestarBot.getBots();
+    }
+
+    @ParseTab("autologin <?>")
+    public Object tabAutoLogin()
+    {
+        return Arrays.asList("add","remove","list","loginall");
+    }
+
+    @ParseTab("autologin add <qq> <pw> <?>")
+    public Object addAutoLogin2()
+    {
+        return BluestarBot.Protocol.values();
+    }
+
+    @ParseTab("autologin remove <?>")
+    public Object tabAutoLoginRemove()
+    {
+        return plugin.getAutoLogin().getList();
+    }
+
+    @ParseTab({"sendfriend <?>","sendgroup <?>","sendmember <?>"})
+    public Object tabSendFriend()
+    {
+        return BluestarBot.getBots().stream().map(Bot::getId).collect(Collectors.toList());
+    }
+
+    @ParseTab("sendfriend <bot> <?>")
+    public Object tabSendFriend0(@Get("bot") Long botqq)
+    {
+        Bot bot=BluestarBot.getBot(botqq);
+        if (bot==null)
+            return null;
+        return bot.getFriends().stream().map(Friend::getId).collect(Collectors.toList());
+    }
+
+    @ParseTab({"sendgroup <bot> <?>","sendmember <bot> <?>"})
+    public Object tabSendGroup0(@Get("bot") Long botqq)
+    {
+        Bot bot=BluestarBot.getBot(botqq);
+        if (bot==null)
+            return null;
+        return bot.getGroups().stream().map(Group::getId).collect(Collectors.toList());
+    }
+
+    @ParseTab("sendmember <bot> <group> <?>")
+    public Object tabSendMember0(@Get("bot") Long botqq,@Get("group") Long groupqq)
+    {
+        Bot bot=BluestarBot.getBot(botqq);
+        if (bot==null)
+            return null;
+        var group=bot.getGroup(groupqq);
+        if (group==null)
+            return null;
+        return group.getMembers();
     }
 }

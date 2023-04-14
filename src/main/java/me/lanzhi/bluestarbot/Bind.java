@@ -2,7 +2,11 @@ package me.lanzhi.bluestarbot;
 
 import me.lanzhi.api.player.gui.GuiItem;
 import me.lanzhi.api.player.gui.PageGui;
+import me.lanzhi.api.io.IOAccessor;
+import me.lanzhi.api.io.KeyInputStream;
+import me.lanzhi.api.io.KeyOutputStream;
 import me.lanzhi.bluestarbot.api.Internal;
+import me.lanzhi.bluestarbot.internal.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -11,7 +15,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.Serializable;
+import java.io.*;
+import java.nio.file.Files;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,14 +26,18 @@ import java.util.UUID;
  * 处理Minecraft-QQ绑定,属于内部类,勿动
  */
 @Internal
-public final class Bind implements Serializable
+public final class Bind
 {
-    private static final long serialVersionUID=0L;
     private final Map<UUID,Long> binds;
 
     public Bind()
     {
         binds=new HashMap<>();
+    }
+
+    public static Bind getInstance()
+    {
+        return BluestarBotPlugin.getInstance().getBind();
     }
 
     public void addBind(UUID uuid,long id)
@@ -43,55 +52,57 @@ public final class Bind implements Serializable
         }
         finally
         {
-            save();
+            Utils.logger().severe(this::save,"账号绑定的数据文件保存失败,可能影响下次运行");
         }
     }
 
-    public UUID getBind(long id)
+    /**
+     * 保存
+     */
+    void save() throws IOException
     {
-        try
+        BluestarBotPlugin plugin=BluestarBotPlugin.getInstance();
+        File data=new File(plugin.getDataFolder(),"bind.db");
+        var out=new DataOutputStream(new KeyOutputStream(Files.newOutputStream(data.toPath()),IOAccessor.hexKey()));
+        out.writeLong(binds.size());
+        for (Map.Entry<UUID,Long> entry: binds.entrySet())
         {
-            for (Map.Entry<UUID,Long> entry: binds.entrySet())
-            {
-                if (entry.getValue()==id)
-                {
-                    return entry.getKey();
-                }
-            }
-            return null;
+            out.writeLong(entry.getValue());
+            out.writeLong(entry.getKey().getMostSignificantBits());
+            out.writeLong(entry.getKey().getLeastSignificantBits());
         }
-        finally
+        out.close();
+    }
+
+    static Bind load() throws IOException
+    {
+        BluestarBotPlugin plugin=BluestarBotPlugin.getInstance();
+        File data=new File(plugin.getDataFolder(),"bind.db");
+        if (!data.exists())
         {
-            save();
+            return new Bind();
         }
+        var in=new DataInputStream(new KeyInputStream(Files.newInputStream(data.toPath()),IOAccessor.hexKey()));
+        Bind bind=new Bind();
+        long size=in.readLong();
+        for (int i=0;i<size;i++)
+        {
+            long id=in.readLong();
+            long most=in.readLong();
+            long least=in.readLong();
+            bind.binds.put(new UUID(most,least),id);
+        }
+        in.close();
+        return bind;
     }
 
     public Long getBind(UUID uuid)
     {
-        try
+        if (uuid==null)
         {
-            if (uuid==null)
-            {
-                return null;
-            }
-            return binds.get(uuid);
+            return null;
         }
-        finally
-        {
-            save();
-        }
-    }
-
-    public Long removeBind(UUID uuid)
-    {
-        try
-        {
-            return binds.remove(uuid);
-        }
-        finally
-        {
-            save();
-        }
+        return binds.get(uuid);
     }
 
     public UUID removeBind(long id)
@@ -104,31 +115,25 @@ public final class Bind implements Serializable
         }
         finally
         {
-            save();
+            Utils.logger().severe(this::save,"账号绑定的数据文件保存失败,可能影响下次运行");
         }
     }
 
-    /**
-     * 保存
-     */
-    public void save()
+    public UUID getBind(long id)
     {
-        try
+        for (Map.Entry<UUID,Long> entry: binds.entrySet())
         {
-            BluestarBotPlugin.getInstance().saveBinds();
+            if (entry.getValue()==id)
+            {
+                return entry.getKey();
+            }
         }
-        catch (Exception e)
-        {
-        }
-    }
-
-    public static Bind getInstance()
-    {
-        return BluestarBotPlugin.getInstance().getBind();
+        return null;
     }
 
     /**
      * 创建一个绑定编辑器的GUI
+     *
      * @return 创建的GUI
      */
     public PageGui.Builder getGui()
@@ -156,5 +161,17 @@ public final class Bind implements Serializable
             builder.item(id++,item);
         }
         return builder.plugin(JavaPlugin.getProvidingPlugin(Bind.class)).title("绑定列表");
+    }
+
+    public Long removeBind(UUID uuid)
+    {
+        try
+        {
+            return binds.remove(uuid);
+        }
+        finally
+        {
+            Utils.logger().severe(this::save,"账号绑定的数据文件保存失败,可能影响下次运行");
+        }
     }
 }

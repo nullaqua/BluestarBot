@@ -13,6 +13,15 @@ public interface IAutoLogin
     void addAutologin(long id,String password);
 
     /**
+     * 添加一个自动登录机器人
+     *
+     * @param id       机器人ID
+     * @param password 密码
+     * @param protocol 协议
+     */
+    void addAutologin(long id,String password,BluestarBot.Protocol protocol);
+
+    /**
      * 移除一个机器人
      *
      * @param id 机器人ID

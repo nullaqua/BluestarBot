@@ -4,7 +4,6 @@ import me.lanzhi.bluestarbot.BluestarBotPlugin;
 import me.lanzhi.bluestarbot.internal.Manager;
 import me.lanzhi.bluestarbot.internal.Mapping;
 import me.lanzhi.bluestarbot.internal.Utils;
-import me.lanzhi.bluestarbot.internal.classloader.MiraiLoader;
 import net.mamoe.mirai.Mirai;
 import net.mamoe.mirai.utils.BotConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -42,16 +41,26 @@ public final class BluestarBot
         return list;
     }
 
+    public static Bot createBot(long id,String password)
+    {
+        return createBot(id,password,Protocol.ANDROID_PAD);
+    }
+
     /**
      * 创建机器人,已存在此id的机器人时直接返回,否则尝试登录
      *
      * @param id       qqid
      * @param password 密码
+     * @param protocol 协议{@link Protocol}
      * @return 创建的实例
      */
     @NotNull
-    public static Bot createBot(long id,String password)
+    public static Bot createBot(long id,String password,Protocol protocol)
     {
+        if (protocol==null)
+        {
+            return createBot(id,password);
+        }
         Thread.currentThread().setContextClassLoader(Utils.classLoaderAccessor().classLoader());
         Bot bot=getBot(id);
         if (bot!=null)
@@ -65,12 +74,21 @@ public final class BluestarBot
         configuration.noBotLog();
         configuration.randomDeviceInfo();
         configuration.setShowingVerboseEventLog(false);
-        configuration.setProtocol(BotConfiguration.MiraiProtocol.IPAD);
+        configuration.setProtocol(protocol.protocol);
         logger().warning("[BluestarBot]预备工作完成,开始新建bot");
         bot=Mapping.map(Mirai.getInstance().getBotFactory().newBot(id,password,configuration));
         logger().warning("[BluestarBot]新建bot完成,开始登录");
         Thread.currentThread().setContextClassLoader(Utils.classLoaderAccessor().classLoader());
-        bot.login();
+        try
+        {
+            bot.login();
+        }
+        catch (Throwable e)
+        {
+            logger().warning("[BluestarBot]登录失败!");
+            e.printStackTrace();
+            throw e;
+        }
         logger().warning("[BluestarBot]登录成功!");
         return bot;
     }
@@ -145,5 +163,39 @@ public final class BluestarBot
     public static IAutoLogin getAutoLogin()
     {
         return plugin.getAutoLogin();
+    }
+
+    /**
+     * 登录协议
+     */
+    public enum Protocol
+    {
+        /**
+         * 安卓手机
+         */
+        ANDROID_PHONE(BotConfiguration.MiraiProtocol.ANDROID_PHONE),
+        /**
+         * 安卓平板
+         */
+        ANDROID_PAD(BotConfiguration.MiraiProtocol.ANDROID_PAD),
+        /**
+         * 安卓手表
+         */
+        ANDROID_WATCH(BotConfiguration.MiraiProtocol.ANDROID_WATCH),
+        /**
+         * 苹果平板
+         */
+        IPAD(BotConfiguration.MiraiProtocol.IPAD),
+        /**
+         * 苹果电脑
+         */
+        MACOS(BotConfiguration.MiraiProtocol.MACOS);
+
+        private final BotConfiguration.MiraiProtocol protocol;
+
+        Protocol(BotConfiguration.MiraiProtocol protocol)
+        {
+            this.protocol=protocol;
+        }
     }
 }

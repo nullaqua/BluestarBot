@@ -10,6 +10,8 @@ import me.lanzhi.bluestarbot.api.contact.group.Group;
 import me.lanzhi.bluestarbot.api.contact.group.GroupMember;
 import me.lanzhi.bluestarbot.api.event.BluestarBotEvent;
 import me.lanzhi.bluestarbot.api.event.MessageReceivedEvent;
+import me.lanzhi.bluestarbot.api.event.bot.BotOnlineEvent;
+import me.lanzhi.bluestarbot.api.event.bot.BotReLoginEvent;
 import me.lanzhi.bluestarbot.api.event.message.received.FriendMessageEvent;
 import me.lanzhi.bluestarbot.api.event.message.received.GroupMessageEvent;
 import org.bukkit.Bukkit;
@@ -56,5 +58,11 @@ public final class TestListener implements Listener
                                     user.getName(),
                                     user.getId(),
                                     ((MessageReceivedEvent) event).getMessageAsString()));
+    }
+
+    @EventHandler
+    public void onLogin(BotOnlineEvent event)
+    {
+        logger().info("Bot online:"+event.getBot().getId());
     }
 }

@@ -1,8 +1,7 @@
 package me.lanzhi.bluestarbot.internal;
 
-import kotlin.ResultKt;
+import kotlin.Result;
 import kotlin.coroutines.Continuation;
-import kotlin.coroutines.jvm.internal.ContinuationImpl;
 import me.lanzhi.api.Bluestar;
 import me.lanzhi.bluestarbot.BluestarBotPlugin;
 import me.lanzhi.bluestarbot.api.Bot;
@@ -63,9 +62,34 @@ import java.util.function.Function;
 @Internal
 public final class Manager
 {
-    public final static List<Long> bots=new ArrayList<>();
-    public final static Map<Long,String> res=new HashMap<>();
+    private final static List<Long> bots=new ArrayList<>();
+    private final static Map<Long,String> res=new HashMap<>();
     private static final List<Listener<?>> listeners=new ArrayList<>();
+
+    private static final Object lock=new Object();
+
+    public static void setRes(long qq,String result)
+    {
+        synchronized (lock)
+        {
+            res.put(qq,result);
+            lock.notifyAll();
+        }
+    }
+
+    public static void cancel(long qq)
+    {
+        synchronized (lock)
+        {
+            bots.remove(qq);
+            lock.notifyAll();
+        }
+    }
+
+    public static List<Long> getVerifyingBots()
+    {
+        return new ArrayList<>(bots);
+    }
 
     public static LoginSolver createLoginSolver()
     {
@@ -77,97 +101,70 @@ public final class Manager
                 return true;
             }
 
-            @Nullable
+
             @Override
-            public Object onSolveDeviceVerification(@NotNull net.mamoe.mirai.Bot bot,
-                                                    @NotNull DeviceVerificationRequests requests,
-                                                    @NotNull Continuation<? super DeviceVerificationResult> $completion)
+            public @NotNull Object onSolveDeviceVerification(@NotNull net.mamoe.mirai.Bot bot,
+                                                             @NotNull DeviceVerificationRequests requests,
+                                                             @NotNull Continuation $completion)
             {
-                return Manager.onSolveDeviceVerification(new Bot(bot),requests,(Continuation<Object>) $completion);
+                var x=Manager.onSolveDeviceVerification(new Bot(bot),requests);
+                $completion.resumeWith(x);
+                return x;
             }
 
             @Nullable
             @Override
-            public Object onSolvePicCaptcha(@NotNull net.mamoe.mirai.Bot bot,@NotNull byte[] bytes,
-                                            @NotNull Continuation<? super String> continuation)
+            public Object onSolvePicCaptcha(@NotNull net.mamoe.mirai.Bot bot,byte @NotNull [] bytes,
+                                            @NotNull Continuation $completion)
             {
-                return Manager.onSolvePicCaptcha(new Bot(bot),bytes,continuation);
+                var x=Manager.onSolvePicCaptcha(new Bot(bot),bytes);
+                $completion.resumeWith(x);
+                return x;
             }
 
             @Nullable
             @Override
             public Object onSolveSliderCaptcha(@NotNull net.mamoe.mirai.Bot bot,@NotNull String s,
-                                               @NotNull Continuation<? super String> continuation)
+                                               @NotNull Continuation $completion)
             {
-                return Manager.onSolveSliderCaptcha(new Bot(bot),s,continuation);
-            }
-
-            @Nullable
-            @Override
-            public Object onSolveUnsafeDeviceLoginVerify(@NotNull net.mamoe.mirai.Bot bot,@NotNull String s,
-                                                         @NotNull Continuation<? super String> continuation)
-            {
-                return Manager.onSolveUnsafeDeviceLoginVerify(new Bot(bot),s,continuation);
+                var x=Manager.onSolveSliderCaptcha(new Bot(bot),s);
+                $completion.resumeWith(x);
+                return x;
             }
         };
     }
 
-    public static Object onSolveDeviceVerification(Bot bot,DeviceVerificationRequests requests,
-                                                   Continuation<Object> $completion)
+    public static Object onSolveDeviceVerification(Bot bot,DeviceVerificationRequests requests)
     {
-        SmsTry:
+        Utils.logger().warning("当前登录的QQ ("+bot.getId()+") 需要设备锁验证");
+        Utils.logger().warning("请在以下方式中选择一种验证方式");
+        if (requests.getSms()!=null)
         {
-            if (requests.getSms()==null)
-            {
-                break SmsTry;
-            }
-            DeviceVerificationRequests.SmsRequest smsRequest=requests.getSms();
-            try
-            {
-                final boolean[] s={true};
-                ContinuationImpl continuation=new ContinuationImpl($completion)
-                {
-                    @Nullable
-                    @Override
-                    public Object invokeSuspend(@NotNull Object o)
-                    {
-                        s[0]=false;
-                        ResultKt.throwOnFailure(o);
-                        return null;
-                    }
-                };
-                smsRequest.requestSms(continuation);
-                while (s[0])
-                {
-                }
-            }
-            catch (Throwable throwable)
-            {
-                break SmsTry;
-            }
-            Utils.logger().warning("当前登录的QQ（"+bot.getId()+"）需要短信验证码");
+            Utils.logger().warning("短信验证");
             Utils.logger().warning("验证码已发送到");
-            Utils.logger().warning(smsRequest.getCountryCode()+" "+smsRequest.getPhoneNumber());
-            Utils.logger().warning("验证完成后，请输入指令 /bluestarbot verify "+bot.getId()+" <验证码>");
-            Utils.logger().warning("如需取消登录，请输入指令 /bluestarbot cancel "+bot.getId());
-            return getRes(bot);
+            Utils.logger().warning(requests.getSms().getCountryCode()+" "+requests.getSms().getPhoneNumber());
+            Utils.logger().warning("使用此方法验证完成后，请输入指令 /bluestarbot verify "+bot.getId()+" <验证码>");
         }
-        SliderTry:
+        if (requests.getFallback()!=null)
         {
-            if (requests.getFallback()==null)
-            {
-                break SliderTry;
-            }
-            onSolveUnsafeDeviceLoginVerify(bot,requests.getFallback().getUrl(),$completion);
-            return requests.getFallback().solved();
+
+            Utils.logger().warning("手机扫码验证");
+            Utils.logger().warning("请打开以下链接进行验证");
+            Utils.logger().warning(requests.getFallback().getUrl());
+            Utils.logger().warning("使用此方法验证完成后，请输入指令 /bluestarbot verify "+bot.getId());
         }
-        Utils.logger().severe("qq要求设备锁验证,但未给出可用验证方式可尝试稍后再试");
-        throw new AssertionError();
+        var result=getRes(bot);
+        if (result!=null&&!result.isEmpty())
+        {
+            Utils.logger().info("QQ机器人: "+bot.getId()+"已使用短信验证完成验证");
+            return requests.getSms().solved(result);
+        }
+        Utils.logger().info("QQ机器人: "+bot.getId()+"已使用扫码验证完成验证");
+        return requests.getFallback().solved();
     }
 
     @Nullable
-    public static Object onSolvePicCaptcha(@NotNull Bot bot,@NotNull byte[] bytes,@NotNull Continuation<?
-            super String> continuation)
+    public static Object onSolvePicCaptcha(@NotNull Bot bot,byte @NotNull [] bytes)
     {
         File imageFile=new File(JavaPlugin.getPlugin(BluestarBotPlugin.class).getDataFolder(),"verify-images");
         imageFile.mkdirs();
@@ -180,8 +177,7 @@ public final class Manager
         {
             Utils.logger().warning("QQ机器人: "+bot.getId()+"在进行登录验证时图片保存失败,原因: "+e);
             throw new CustomLoginFailedException(true,"无法保存验证图片")
-            {
-            };
+            {};
         }
 
         try (FileOutputStream stream=new FileOutputStream(imageFile))
@@ -193,8 +189,7 @@ public final class Manager
         {
             Utils.logger().warning("QQ机器人: "+bot.getId()+"在进行登录验证时图片保存失败,原因: "+e);
             throw new CustomLoginFailedException(true,"无法保存验证图片")
-            {
-            };
+            {};
         }
 
         Utils.logger().warning("当前登录的QQ（"+bot.getId()+"）需要文字验证码验证");
@@ -207,8 +202,7 @@ public final class Manager
     }
 
     @Nullable
-    public static Object onSolveSliderCaptcha(@NotNull Bot bot,@NotNull String s,
-                                              @NotNull Continuation<? super String> continuation)
+    public static Object onSolveSliderCaptcha(@NotNull Bot bot,@NotNull String s)
     {
         Utils.logger().warning("当前登录的QQ（"+bot.getId()+"）需要滑动验证码验证");
         Utils.logger().warning("请打开以下链接进行验证");
@@ -219,56 +213,36 @@ public final class Manager
         return getRes(bot);
     }
 
-    @Nullable
-    public static Object onSolveUnsafeDeviceLoginVerify(@NotNull Bot bot,@NotNull String s,@NotNull Continuation<?
-            super String> continuation)
-    {
-        Utils.logger().warning("当前登录的QQ（"+bot.getId()+"）需要设备锁验证");
-        Utils.logger().warning("请打开以下链接进行验证");
-        Utils.logger().warning(s);
-        Utils.logger().warning("验证完成后，请输入指令 /bluestarbot verify "+bot.getId());
-        Utils.logger().warning("如需取消登录，请输入指令 /bluestarbot cancel "+bot.getId());
-
-        return getRes(bot);
-    }
-
-    private static @Nullable Object getRes(@NotNull Bot bot)
+    private static @Nullable String getRes(@NotNull Bot bot)
     {
         bots.add(bot.getId());
-        try
+        while (true)
         {
-            Thread threads=new Thread()
+            synchronized (lock)
             {
-                @Override
-                public void run()
+                if (bots.contains(bot.getId())&&!res.containsKey(bot.getId()))
                 {
-                    while (bots.contains(bot.getId())&&!res.containsKey(bot.getId()))
-                        ;
+                    try
+                    {
+                        lock.wait();
+                    }
+                    catch (Throwable ignored)
+                    {
+                    }
                 }
-            };
-            threads.start();
-            threads.join();
-        }
-        catch (Exception e)
-        {
-            Utils.logger().warning("QQ机器人: "+bot.getId()+"创建登录线程时失败,原因: "+e);
-            throw new CustomLoginFailedException(true,"无法创建登录线程")
-            {
-            };
-        }
-
-        if (res.containsKey(bot.getId()))
-        {
-            bots.remove(bot.getId());
-            return res.remove(bot.getId());
-        }
-        else
-        {
-            bots.remove(bot.getId());
-            res.remove(bot.getId());
-            throw new CustomLoginFailedException(true,"用户取消登录操作")
-            {
-            };
+                else if (res.containsKey(bot.getId()))
+                {
+                    bots.remove(bot.getId());
+                    return Manager.res.remove(bot.getId());
+                }
+                else
+                {
+                    bots.remove(bot.getId());
+                    res.remove(bot.getId());
+                    throw new CustomLoginFailedException(true,"用户取消登录操作")
+                    {};
+                }
+            }
         }
     }
 

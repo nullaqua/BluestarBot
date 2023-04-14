@@ -6,7 +6,7 @@
 
     <groupId>me.lanzhi</groupId>
     <artifactId>BluestarBot</artifactId>
-    <version>1.4.1</version>
+    <version>1.4.2</version>
     <packaging>jar</packaging>
 
     <name>BluestarBot</name>
@@ -51,7 +51,7 @@
                         <include>**/*</include>
                     </includes>
                     <repositoryName>maven-repository</repositoryName>
-                    <repositoryOwner>lanzhi6</repositoryOwner>
+                    <repositoryOwner>nullaqua</repositoryOwner>
                 </configuration>
                 <executions>
                     <execution>
@@ -153,23 +153,16 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>net.mamoe</groupId>
-            <artifactId>mirai-core-jvm</artifactId>
-            <version>2.13.2</version>
-            <scope>provided</scope>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
             <groupId>me.lanzhi</groupId>
             <artifactId>BluestarAPI-Bukkit-injector</artifactId>
-            <version>3.3.2</version>
+            <version>3.4.3</version>
             <scope>compile</scope>
             <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>net.mamoe</groupId>
             <artifactId>mirai-core-all</artifactId>
-            <version>2.13.2</version>
+            <version>2.14.0</version>
             <scope>provided</scope>
             <optional>true</optional>
         </dependency>

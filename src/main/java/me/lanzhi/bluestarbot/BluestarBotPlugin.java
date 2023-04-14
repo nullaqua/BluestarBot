@@ -1,13 +1,8 @@
 package me.lanzhi.bluestarbot;
 
+import me.lanzhi.api.Bluestar;
 import me.lanzhi.api.reflect.FieldAccessor;
 import me.lanzhi.api.reflect.URLClassLoaderAccessor;
-import me.lanzhi.api.util.io.IOAccessor;
-import me.lanzhi.api.util.io.IOStreamKey;
-import me.lanzhi.api.util.io.KeyObjectInputStream;
-import me.lanzhi.api.util.io.file.FileWithVersionReader;
-import me.lanzhi.api.util.io.file.FileWithVersionWriter;
-import me.lanzhi.api.util.io.file.ReadVersion;
 import me.lanzhi.bluestarbot.api.BluestarBot;
 import me.lanzhi.bluestarbot.api.Internal;
 import me.lanzhi.bluestarbot.api.event.BluestarBotEvent;
@@ -20,11 +15,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URLClassLoader;
-import java.nio.file.Files;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.Consumer;
 
@@ -77,7 +71,8 @@ public final class BluestarBotPlugin extends JavaPlugin
     public void onEnable()
     {
         Bukkit.getScheduler().runTaskAsynchronously(this,()->autoLogin.loginAll());
-        getCommand("bluestarbot").setExecutor(new BluestarBotCommand(this));
+        //getCommand("bluestarbot").setExecutor(new BluestarBotCommand(this));
+        Bluestar.getCommandManager().registerPluginCommand(this,new BluestarBotCommand(this));
         Manager.registerEvents();
         Bukkit.getPluginManager().registerEvents(new TestListener(this),this);
     }
@@ -87,100 +82,44 @@ public final class BluestarBotPlugin extends JavaPlugin
     {
         Manager.unregisterEvents();
 
-        Utils.logger().severe(this::saveAutoLogin,"自动登录的数据文件报错失败,可能影响下次运行");
-        Utils.logger().severe(this::saveBinds,"账号绑定的数据文件报错失败,可能影响下次运行");
+        Utils.logger().severe(this::saveAutoLogin,"自动登录的数据文件保存失败,可能影响下次运行");
+        Utils.logger().severe(this::saveBinds,"账号绑定的数据文件保存失败,可能影响下次运行");
     }
 
-    private void loadAutoLogin()
+    public void loadAutoLogin() throws IOException
     {
-        File data=new File(getDataFolder(),"autologin.db");
-        if (!data.exists()||data.isDirectory())
+        try
         {
-            Utils.logger().warning("自动登录数据文件不存在,已自动创建");
-            autoLogin=new AutoLogin();
-            return;
+            this.autoLogin=AutoLogin.load();
         }
-        var reader=new FileWithVersionReader(data);
-        reader.read(new FileWithVersionReader.Worker()
+        catch (IOException e)
         {
-            @ReadVersion("1.0.0")
-            public void read1(KeyObjectInputStream in) throws Throwable
-            {
-                Utils.logger().warning("自动登录数据文件版本为1.0.0,正在读取");
-                autoLogin=(AutoLogin) in.readObject();
-            }
-
-            @Override
-            public void defaultRead(String version,KeyObjectInputStream stream)
-            {
-                try
-                {
-                    Utils.logger().warning("自动登录数据文件版本为"+version+",可能不兼容,正在尝试读取");
-                    KeyObjectInputStream kois=KeyObjectInputStream.create(Files.newInputStream(data.toPath()));
-                    IOStreamKey key=(IOStreamKey) kois.readObject();
-                    autoLogin=(AutoLogin) kois.readObject(key);
-                }
-                catch (Throwable e)
-                {
-                    Utils.logger().warning("自动登录数据文件版本为"+version+",可能不兼容,读取失败");
-                    autoLogin=new AutoLogin();
-                    throw new RuntimeException(e);
-                }
-            }
-        },null,IOAccessor.hexKey());
+            this.autoLogin=new AutoLogin();
+            throw e;
+        }
     }
 
-    private void loadBinds()
+    public boolean loadBinds()
     {
-        File data=new File(getDataFolder(),"bind.db");
-        if (!data.exists()||data.isDirectory())
+        try
         {
-            Utils.logger().warning("账号绑定数据文件不存在,已自动创建");
-            bind=new Bind();
-            return;
+            this.bind=Bind.load();
+            return false;
         }
-        var reader=new FileWithVersionReader(data);
-        reader.read(new FileWithVersionReader.Worker()
+        catch (IOException e)
         {
-            @ReadVersion("1.0.0")
-            public void read1(KeyObjectInputStream in) throws Throwable
-            {
-                Utils.logger().warning("正在读取账号绑定数据文件: 1.0.0");
-                bind=(Bind) in.readObject();
-            }
-
-            @Override
-            public void defaultRead(String version,KeyObjectInputStream stream)
-            {
-                try
-                {
-                    Utils.logger().warning("正在读取账号绑定数据文件: "+version);
-                    KeyObjectInputStream kois=KeyObjectInputStream.create(Files.newInputStream(data.toPath()));
-                    IOStreamKey key=(IOStreamKey) kois.readObject();
-                    bind=(Bind) kois.readObject(key);
-                }
-                catch (Throwable e)
-                {
-                    Utils.logger().warning("账号绑定数据文件读取失败,已自动创建");
-                    bind=new Bind();
-                    throw new RuntimeException(e);
-                }
-            }
-        },null,IOAccessor.hexKey());
+            return true;
+        }
     }
 
     public void saveAutoLogin() throws IOException
     {
-        File data=new File(getDataFolder(),"autologin.db");
-        var writer=new FileWithVersionWriter(data);
-        writer.saveFile(null,IOAccessor.hexKey(),"1.0.0",out->out.writeObject(autoLogin));
+        autoLogin.save();
     }
 
     public void saveBinds() throws IOException
     {
-        File data=new File(getDataFolder(),"bind.db");
-        var writer=new FileWithVersionWriter(data);
-        writer.saveFile(null,IOAccessor.hexKey(),"1.0.0",out->out.writeObject(bind));
+        bind.save();
     }
 
     public Set<Consumer<BluestarBotEvent>> getListeners()
@@ -190,10 +129,9 @@ public final class BluestarBotPlugin extends JavaPlugin
 
     public <T extends BluestarBotEvent> void addListener(Class<T> clazz,Consumer<T> consumer,Plugin plugin)
     {
-        if (consumer==null||plugin==null)
-        {
-            return;
-        }
+        Objects.requireNonNull(clazz);
+        Objects.requireNonNull(consumer);
+        Objects.requireNonNull(plugin);
         listeners.add(new Consumer<>()
         {
             @Override
@@ -205,12 +143,12 @@ public final class BluestarBotPlugin extends JavaPlugin
                     {
                         listeners.remove(this);
                     }
-                    if (clazz==null||clazz.isAssignableFrom(event.getClass()))
+                    if (clazz.isAssignableFrom(event.getClass()))
                     {
-                        consumer.accept((T) event);
+                        consumer.accept(clazz.cast(event));
                     }
                 }
-                catch (Exception e)
+                catch (Exception ignored)
                 {
                 }
             }
