@@ -8,7 +8,7 @@ import net.mamoe.mirai.contact.AudioSupported;
  *
  * @see SendAudioAble 可发送语音
  */
-public final class Friend extends User implements SendAudioAble
+public final class Friend extends User implements SendAudioAble, RoamingSupported
 {
     @Internal
     public Friend(net.mamoe.mirai.contact.Friend friend)
@@ -50,5 +50,12 @@ public final class Friend extends User implements SendAudioAble
     public String toString()
     {
         return "Friend{bot:"+getBot().getId()+",id:"+getId()+"}";
+    }
+
+    @Internal
+    @Override
+    public net.mamoe.mirai.contact.roaming.RoamingSupported getRoamingSupported()
+    {
+        return getFriend();
     }
 }

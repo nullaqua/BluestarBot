@@ -2,6 +2,7 @@ package me.lanzhi.bluestarbot.api.contact.group;
 
 import me.lanzhi.bluestarbot.api.Internal;
 import me.lanzhi.bluestarbot.api.contact.Contact;
+import me.lanzhi.bluestarbot.api.contact.RoamingSupported;
 import me.lanzhi.bluestarbot.api.contact.SendAudioAble;
 import me.lanzhi.bluestarbot.api.contact.User;
 import me.lanzhi.bluestarbot.internal.Mapping;
@@ -17,7 +18,7 @@ import java.util.List;
  * @see Contact 聊天频道
  * @see SendAudioAble 支持发送语音
  */
-public final class Group extends Contact implements SendAudioAble
+public final class Group extends Contact implements SendAudioAble, RoamingSupported
 {
     @Internal
     public Group(net.mamoe.mirai.contact.Group group)
@@ -219,5 +220,11 @@ public final class Group extends Contact implements SendAudioAble
     public String toString()
     {
         return "Group{bot:"+getBot().getId()+",id:"+getId()+"}";
+    }
+
+    @Override
+    public net.mamoe.mirai.contact.roaming.RoamingSupported getRoamingSupported()
+    {
+        return getGroup();
     }
 }
