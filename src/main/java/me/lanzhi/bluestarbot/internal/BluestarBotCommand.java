@@ -27,10 +27,12 @@ public final class BluestarBotCommand
 {
     @ParseTab("verify <qq> <?>")
     public final String verify="<code>";
-    @ParseTab("autologin add <?>")
+    @ParseTab({"autologin add <?>","login <?>"})
     public final String addAutoLogin0="<QQId>";
-    @ParseTab("autologin add <qq> <?>")
+    @ParseTab({"autologin add <qq> <?>","login <qq> <?>"})
     public final String addAutoLogin1="<password>";
+    @ParseTab({"autologin add <qq> <pw> <?>","login <qq> <pw> <?>"})
+    public final Object addAutoLogin2=BluestarBot.Protocol.values();
     @ParseTab({"sendfriend <bot> <friend> <?>","sendgroup <bot> <group> <?>","sendmember <bot> <group> <member> <?>"})
     public final String sendFriend="<message>";
     @ParseCommand("...")
@@ -77,7 +79,7 @@ public final class BluestarBotCommand
         {
             return ChatColor.RED+"QQ号码不合法";
         }
-        BluestarBot.createBot(qq,pw,prot);
+        Bukkit.getScheduler().runTaskAsynchronously(plugin,()->BluestarBot.createBot(qq,pw,prot));
         return null;
     }
 
@@ -227,12 +229,6 @@ public final class BluestarBotCommand
                             "sendmember",
                             "bind",
                             "addbind"};
-    }
-
-    @ParseTab("login <?>")
-    public Object tabLogin()
-    {
-        return "<QQId>";
     }
 
     @ParseTab("addbind <?>")
